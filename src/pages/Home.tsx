@@ -178,32 +178,38 @@ export const Home: React.FC = () => {
     <div className="space-y-16 sm:space-y-24">
       {/* 1. CINEMATIC HERO SECTION (Matching User's Reference Screenshot) */}
       <section className="relative min-h-[92vh] flex items-center justify-start overflow-hidden bg-[#032616] text-white">
-        {/* Full-width authentic conference banquet hall background images with zoom in / zoom out fading animations */}
+        {/* Full-width authentic conference banquet hall background images with smooth Ken Burns zoom & zero blank background */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={bgIndex}
-              src={heroBackgrounds[bgIndex]}
-              alt="Chartered Institute of Bankers Ghana Conference Hall"
-              initial={{
-                opacity: 0,
-                scale: bgIndex % 2 === 0 ? 1.0 : 1.14,
-              }}
-              animate={{
-                opacity: 1,
-                scale: bgIndex % 2 === 0 ? 1.14 : 1.0,
-              }}
-              exit={{
-                opacity: 0,
-                scale: bgIndex % 2 === 0 ? 1.16 : 0.98,
-              }}
-              transition={{
-                opacity: { duration: 2.0, ease: 'easeInOut' },
-                scale: { duration: 7.0, ease: 'easeInOut' },
-              }}
-              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.70] contrast-105"
-            />
-          </AnimatePresence>
+          {heroBackgrounds.map((src, index) => {
+            const isActive = index === bgIndex;
+            return (
+              <motion.div
+                key={src}
+                className="absolute inset-0 w-full h-full"
+                initial={false}
+                animate={{
+                  opacity: isActive ? 1 : 0,
+                  zIndex: isActive ? 2 : 1,
+                }}
+                transition={{
+                  opacity: { duration: 1.8, ease: 'easeInOut' },
+                }}
+              >
+                <motion.img
+                  src={src}
+                  alt="Chartered Institute of Bankers Ghana Conference Hall"
+                  initial={false}
+                  animate={{
+                    scale: isActive ? 1.12 : 1.04,
+                  }}
+                  transition={{
+                    scale: { duration: 7.0, ease: 'easeOut' },
+                  }}
+                  className="w-full h-full object-cover object-center brightness-[0.72] contrast-105"
+                />
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Soft dark green tint on the left to ensure text legibility while letting the hall image show through clearly */}

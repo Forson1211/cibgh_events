@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
             <img
               src="/cib-logo-white.png"
               alt="Chartered Institute of Bankers, Ghana"
-              className="h-12 sm:h-16 w-auto object-contain group-hover:opacity-90 transition-opacity"
+              className="h-16 sm:h-20 md:h-[84px] w-auto object-contain group-hover:opacity-90 transition-opacity"
             />
           </Link>
 

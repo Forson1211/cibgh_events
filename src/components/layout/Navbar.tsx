@@ -55,12 +55,12 @@ export const Navbar: React.FC = () => {
     >
       <div className="relative z-50 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo - Aligned flush with container margin */}
-          <Link to="/" className="flex items-center group focus:outline-none py-1 -ml-2.5 sm:-ml-3 md:-ml-3.5">
+          {/* Brand Logo */}
+          <Link to="/" className="flex items-center group focus:outline-none py-1 ml-0.5 sm:-ml-2 md:-ml-3.5">
             <img
               src="/cib-logo-navbar.png"
               alt="Chartered Institute of Bankers, Ghana"
-              className="h-14 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
+              className="h-16 sm:h-18 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
             />
           </Link>
 
@@ -161,7 +161,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 text-slate-900 bg-transparent border-0 shadow-none outline-none focus:outline-none active:opacity-70 transition-opacity"
+              className="p-1 text-slate-950 bg-transparent border-0 shadow-none outline-none focus:outline-none active:opacity-70 transition-opacity"
               aria-label="Toggle Navigation Menu"
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -173,7 +173,7 @@ export const Navbar: React.FC = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-7 h-7 stroke-[2.85] text-slate-950" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -183,7 +183,7 @@ export const Navbar: React.FC = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <Menu className="w-6 h-6" />
+                    <Menu className="w-7 h-7 stroke-[2.85] text-slate-950" />
                   </motion.div>
                 )}
               </AnimatePresence>
