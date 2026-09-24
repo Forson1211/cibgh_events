@@ -1,0 +1,40 @@
+import React from 'react';
+
+// Easily configure the WhatsApp number when provided by the user
+// Format: international without +, e.g., '233240000000' for Ghana (+233 24 000 0000)
+export const WHATSAPP_PHONE_NUMBER = '233302541309'; 
+export const WHATSAPP_DEFAULT_MESSAGE = 'Hello CIB Ghana, I would like to inquire about your upcoming events and registration.';
+
+export const WhatsAppWidget: React.FC = () => {
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(
+    WHATSAPP_DEFAULT_MESSAGE
+  )}`;
+
+  return (
+    <div className="fixed bottom-6 sm:bottom-8 right-3.5 sm:right-10 md:right-12 z-50 group">
+      {/* Tooltip on hover */}
+      <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out whitespace-nowrap bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 shadow-md hidden sm:block">
+        Chat with us on WhatsApp
+        {/* Little right arrow pointer */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-full w-0 h-0 border-y-4 border-y-transparent border-l-4 border-l-slate-900" />
+      </div>
+
+      {/* Floating WhatsApp Action Button */}
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95 focus:outline-none"
+      >
+        <svg
+          viewBox="0 0 16 16"
+          className="w-8 h-8 sm:w-9 sm:h-9 fill-white"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+        </svg>
+      </a>
+    </div>
+  );
+};

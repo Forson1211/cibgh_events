@@ -35,7 +35,7 @@ export const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker, onSelect, cla
       {/* Info Block */}
       <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
         <div className="space-y-1">
-          <h4 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#008129] transition-colors font-display line-clamp-1">
+          <h4 className="text-base sm:text-lg font-bold text-black font-display line-clamp-1">
             {speaker.name}
           </h4>
           <p className="text-xs font-semibold text-[#008129] line-clamp-1">
@@ -46,9 +46,9 @@ export const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker, onSelect, cla
           </p>
         </div>
 
-        {/* View Profile CTA placed exactly where requested (replacing the topic pill) */}
+        {/* View Profile CTA - Solid green, no fade out, no stroke */}
         <div className="mt-3.5 pt-3 border-t border-slate-100">
-          <span className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-none bg-slate-50 group-hover:bg-[#008129] text-slate-700 group-hover:text-white border border-slate-200 group-hover:border-[#008129] text-xs font-bold transition-all duration-200 shadow-sm">
+          <span className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-none bg-[#008129] hover:bg-[#006e22] text-white text-xs font-bold transition-all duration-200 shadow-sm">
             <span>View Profile</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </span>

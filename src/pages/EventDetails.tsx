@@ -56,41 +56,43 @@ export const EventDetails: React.FC = () => {
   return (
     <div className="space-y-16 sm:space-y-24 pb-20">
       {/* 1. CINEMATIC EVENT HERO (Requirement #16 & #47) */}
-      <section className="relative min-h-[75vh] flex items-center bg-cib-charcoal-950 text-white overflow-hidden">
-        {/* Background Visual */}
+      <section className="relative min-h-[75vh] flex items-center bg-[#032616] text-white overflow-hidden">
+        {/* Background Visual - Aqua Safari Resort Banner (Bright & Clear) */}
         <div className="absolute inset-0 z-0">
           <img
-            src={event.banner_image || event.featured_image}
+            src="/aqua-safari-night.jpg"
             alt={event.title}
-            className="w-full h-full object-cover brightness-[0.35] contrast-110"
+            className="w-full h-full object-cover brightness-[0.82] contrast-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-cib-charcoal-950 via-cib-charcoal-950/70 to-transparent" />
+          {/* Subtle soft gradient only on the left/bottom to maintain text legibility while letting the resort image shine */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#021a0f]/65 via-[#021a0f]/30 via-40% to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#021a0f]/40 via-transparent to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 space-y-6">
+        <div className="relative z-10 w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 space-y-6 text-left">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <Link to="/events" className="hover:text-white transition-colors">Events</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-cib-gold-400 truncate max-w-xs">{event.category}</span>
+            <span className="text-[#FFE500] truncate max-w-xs">{event.category}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="gold" size="md" className="bg-amber-400/20 text-cib-gold-300 border-cib-gold-400/30">
+            <Badge variant="gold" size="md" className="bg-amber-400/20 text-[#FFE500] border-amber-400/30">
               {event.category}
             </Badge>
             <AttendanceTypeBadge type={event.event_type} />
             <EventStatusBadge status={event.status} />
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white max-w-4xl leading-[1.12]">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white max-w-4xl leading-[1.12] drop-shadow-lg">
             {event.title}
           </h1>
 
           {event.tagline && (
-            <p className="text-base sm:text-xl text-emerald-200 font-medium max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-xl text-emerald-100 font-semibold max-w-3xl leading-relaxed drop-shadow-md">
               {event.tagline}
             </p>
           )}
@@ -98,16 +100,18 @@ export const EventDetails: React.FC = () => {
           {/* Schedule & Location Pills */}
           <div className="flex flex-wrap items-center gap-6 text-xs sm:text-sm font-semibold text-slate-200 pt-2">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-cib-gold-400" />
+              <Calendar className="w-4 h-4 text-[#FFE500]" />
               <span>{formatDateRange(event.start_date, event.end_date)}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-cib-gold-400" />
+              <Clock className="w-4 h-4 text-[#FFE500]" />
               <span>{event.start_time} – {event.end_time} GMT</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-cib-gold-400" />
-              <span>{event.venue}, {event.location}</span>
+              <MapPin className="w-4 h-4 text-[#FFE500]" />
+              <span>
+                {event.venue?.includes('Kempinski') ? 'Aqua Safari, Ada' : event.venue}, {event.venue?.includes('Kempinski') ? 'Ada, Ghana' : event.location}
+              </span>
             </div>
           </div>
 
@@ -293,23 +297,30 @@ export const EventDetails: React.FC = () => {
         </section>
       )}
 
-      {/* 5. INTERACTIVE AGENDA SECTION */}
+      {/* 5. INTERACTIVE AGENDA SECTION (Full-width Brand Red-to-Yellow Gradient Background matching Homepage) */}
       {event.agenda && event.agenda.length > 0 && (
-        <section id="agenda" className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
-          <div className="space-y-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-cib-green-700">
-              TIMETABLE
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-cib-charcoal-900 font-display">
-              EVENT AGENDA
-            </h2>
-          </div>
+        <section id="agenda" className="w-full bg-gradient-to-r from-[#F20300] via-[#F86400] to-[#FFC400] py-10 sm:py-14 text-white scroll-mt-24 shadow-inner">
+          <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div className="text-left max-w-3xl space-y-1.5">
+              <span className="text-[11px] font-black uppercase tracking-widest text-yellow-200">
+                PROGRAMME ITINERARY
+              </span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white font-display uppercase tracking-tight">
+                CONFERENCE AGENDA
+              </h2>
+              <p className="text-white/95 text-xs sm:text-sm max-w-2xl font-medium">
+                Explore keynotes, regulatory addresses, CEO panel debates, and executive sessions scheduled across the two-day summit.
+              </p>
+            </div>
 
-          <AgendaTimeline
-            sessions={event.agenda}
-            speakers={event.speakers}
-            onSelectSpeaker={(spk) => setSelectedSpeaker(spk)}
-          />
+            <div className="w-full">
+              <AgendaTimeline
+                sessions={event.agenda}
+                speakers={event.speakers}
+                onSelectSpeaker={(spk) => setSelectedSpeaker(spk)}
+              />
+            </div>
+          </div>
         </section>
       )}
 

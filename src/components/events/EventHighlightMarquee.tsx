@@ -9,157 +9,157 @@ export interface GalleryPhoto {
   category?: string;
 }
 
-// 24 curated conference, podium, networking, and audience photos matching user's reference
+// 24 authentic Aqua Safari Resort venue, leisure, and CIB Ghana conference photos
 const ROW_1_PHOTOS: GalleryPhoto[] = [
   {
     id: 'r1-1',
-    image_url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
-    caption: 'Governor Delivering Opening Keynote Address',
-    category: 'Keynote'
+    image_url: '/aqua-safari-lawn-night.jpg',
+    caption: 'Aqua Safari Conference Lawns & Illuminated Evening Grounds',
+    category: 'Venue & Grounds'
   },
   {
     id: 'r1-2',
-    image_url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80',
-    caption: 'Young Banking Professionals & University Fellows',
-    category: 'Delegates'
+    image_url: '/aqua-safari-drone.jpg',
+    caption: 'Aerial Panorama of Aqua Safari Resort Peninsula on the Volta River',
+    category: 'Official Aerial'
   },
   {
     id: 'r1-3',
-    image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
-    caption: 'Plenary Session Audience at Kempinski Grand Ballroom',
-    category: 'Auditorium'
+    image_url: '/aqua-safari-pool-river.png',
+    caption: 'Lagoon Swimming Pool Overlooking Volta River Estuary',
+    category: 'Resort Amenities'
   },
   {
     id: 'r1-4',
-    image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-    caption: 'Executive Panel: Ethical AI Governance in Banking',
-    category: 'Panel'
+    image_url: '/cib-conference-hall.jpg',
+    caption: 'CIB Ghana Delegates in Plenary Session at the Grand Hall',
+    category: 'Conference Hall'
   },
   {
     id: 'r1-5',
-    image_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    caption: 'Fintech Innovation Syndicate Collaboration',
-    category: 'Breakout'
+    image_url: '/aqua-safari-deck.jpg',
+    caption: 'Waterfront Wooden Pool Promenade & Twilight Sun Loungers',
+    category: 'Resort Deck'
   },
   {
     id: 'r1-6',
-    image_url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
-    caption: 'Exhibition Hall & Partner Showcase Networking',
-    category: 'Networking'
+    image_url: '/aqua-safari-waterfront.jpg',
+    caption: 'Waterfront Luxury Chalets & Manicured Tropical Gardens',
+    category: 'Resort Grounds'
   },
   {
     id: 'r1-7',
-    image_url: 'https://images.unsplash.com/photo-1531497865144-0464ef8fb9a9?auto=format&fit=crop&w=800&q=80',
-    caption: 'Young Women Leaders in African Banking Initiative',
-    category: 'Leadership'
+    image_url: '/aqua-safari-kayak.jpg',
+    caption: 'Volta River Kayaking & Complimentary Leisure Sports',
+    category: 'Leisure Activities'
   },
   {
     id: 'r1-8',
-    image_url: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?auto=format&fit=crop&w=800&q=80',
-    caption: 'Chief Risk Officer Masterclass Workshop',
-    category: 'Workshop'
+    image_url: '/cib-conference-hall-2.jpg',
+    caption: 'Keynote Address & Policy Discourse at National Banking Summit',
+    category: 'Keynote Session'
   }
 ];
 
 const ROW_2_PHOTOS: GalleryPhoto[] = [
   {
     id: 'r2-1',
-    image_url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
-    caption: 'Chartered Bankers Class of 2026 Celebration',
-    category: 'Fellows'
+    image_url: '/aqua-safari-aerial-beach.png',
+    caption: 'Private Sandy Beach & Waterfront Chalets at Aqua Safari',
+    category: 'Waterfront Beach'
   },
   {
     id: 'r2-2',
-    image_url: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
-    caption: 'Distinguished Speaker at the Podium on Stage',
-    category: 'Speaker'
+    image_url: '/aqua-safari-night.jpg',
+    caption: 'Twilight Pool Illumination & Executive Clubhouse at Dusk',
+    category: 'Night Ambiance'
   },
   {
     id: 'r2-3',
-    image_url: 'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=800&q=80',
-    caption: 'Engaged Delegates Listening to Policy Deliberations',
-    category: 'Audience'
+    image_url: '/aqua-safari-chalets.jpg',
+    caption: 'Executive Waterfront Lodges & Safari Architecture',
+    category: 'Accommodations'
   },
   {
     id: 'r2-4',
-    image_url: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
-    caption: 'Roundtable Discussion: ESG Compliance & Green Financing',
-    category: 'Roundtable'
+    image_url: '/aqua-safari-balcony-palms.png',
+    caption: 'Balcony View Across Tropical Palms & Chalets',
+    category: 'Resort Views'
   },
   {
     id: 'r2-5',
-    image_url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80',
-    caption: 'Institutional Partnership Signing Ceremony',
-    category: 'Ceremony'
+    image_url: '/aqua-safari-suite.jpg',
+    caption: 'Luxury Suite Interior & Executive Accommodations',
+    category: 'Executive Living'
   },
   {
     id: 'r2-6',
-    image_url: 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&w=800&q=80',
-    caption: 'Executive Luncheon & Bilateral Exchange',
-    category: 'Luncheon'
+    image_url: '/aqua-safari-pool-promenade.png',
+    caption: 'Aqua Safari Resort Poolside Terrace & Architectural Clubhouse',
+    category: 'Poolside Terrace'
   },
   {
     id: 'r2-7',
-    image_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
-    caption: 'Keynote Q&A Session with Banking Executives',
-    category: 'Q&A'
+    image_url: '/cib-conference-hall.jpg',
+    caption: 'Plenary Deliberations & Executive Networking',
+    category: 'Executive Network'
   },
   {
     id: 'r2-8',
-    image_url: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-    caption: 'Student Mentorship & Next-Gen Banking Forum',
-    category: 'Youth'
+    image_url: '/aqua-safari-drone.jpg',
+    caption: 'The Pristine Natural Setting of Ada Foah, Ghana',
+    category: 'Scenic Location'
   }
 ];
 
 const ROW_3_PHOTOS: GalleryPhoto[] = [
   {
     id: 'r3-1',
-    image_url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
-    caption: 'Conference Grand Foyer Morning Registration',
-    category: 'Registration'
+    image_url: '/aqua-safari-pool-promenade.png',
+    caption: 'Sun-drenched Pool Promenade & Tropical Relaxation',
+    category: 'Promenade'
   },
   {
     id: 'r3-2',
-    image_url: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=800&q=80',
-    caption: 'Bank of Ghana Supervisory Presentation',
-    category: 'Keynote'
+    image_url: '/aqua-safari-waterfront.jpg',
+    caption: 'Morning Stroll along the Ada Estuary Waterfront',
+    category: 'Waterfront'
   },
   {
     id: 'r3-3',
-    image_url: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80',
-    caption: 'Commercial Bank CEOs at Annual Ethics Summit',
-    category: 'Executives'
+    image_url: '/aqua-safari-lawn-night.jpg',
+    caption: 'Evening Dinner Reception Grounds by the Pool',
+    category: 'Evening Gala'
   },
   {
     id: 'r3-4',
-    image_url: 'https://images.unsplash.com/photo-1558403194-611308249627?auto=format&fit=crop&w=800&q=80',
-    caption: 'Technical Masterclass on Cyber Security & Fraud',
-    category: 'Masterclass'
+    image_url: '/aqua-safari-deck.jpg',
+    caption: 'Sunset Deck Overlooking the Calm River Waters',
+    category: 'Sunset Lounge'
   },
   {
     id: 'r3-5',
-    image_url: 'https://images.unsplash.com/photo-1527525443983-6e60c75fff46?auto=format&fit=crop&w=800&q=80',
-    caption: 'Annual Banking Excellence Gala Dinner & Awards',
-    category: 'Gala'
+    image_url: '/aqua-safari-balcony-palms.png',
+    caption: 'Tropical Palm Gardens & Peaceful Executive Retreat',
+    category: 'Resort Gardens'
   },
   {
     id: 'r3-6',
-    image_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
-    caption: 'Delegates Celebrating Conference Resolutions',
-    category: 'Celebration'
+    image_url: '/aqua-safari-kayak.jpg',
+    caption: 'River Adventures & Executive Leisure Excursions',
+    category: 'River Leisure'
   },
   {
     id: 'r3-7',
-    image_url: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    caption: 'Presidential Address at Bankers Annual Dinner',
-    category: 'Presidency'
+    image_url: '/aqua-safari-night.jpg',
+    caption: 'Architectural Night Illumination at Aqua Safari Resort',
+    category: 'Night View'
   },
   {
     id: 'r3-8',
-    image_url: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
-    caption: 'Fintech Demo Hall & Digital Transformation Stalls',
-    category: 'Exhibition'
+    image_url: '/aqua-safari-aerial-beach.png',
+    caption: 'Exclusive Ada Foah Island & Riverfront Retreat',
+    category: 'Panoramic Retreat'
   }
 ];
 

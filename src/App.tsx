@@ -16,7 +16,7 @@ import { PastEvents } from './pages/PastEvents';
 import { Resources } from './pages/Resources';
 import { Contact } from './pages/Contact';
 import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
+import { MyPortal } from './pages/MyPortal';
 import { NotFound } from './pages/NotFound';
 
 // Admin Pages
@@ -33,8 +33,29 @@ import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 import { AdminSettings } from './pages/admin/AdminSettings';
 
 import { ScrollProgressBar } from './components/ui/ScrollProgressBar';
-import { BackToTop } from './components/ui/BackToTop';
-import { ChatbotWidget } from './components/chat/ChatbotWidget';
+import { WhatsAppWidget } from './components/chat/WhatsAppWidget';
+
+// Ensures desktop screens maintain the 100% scale regardless of Windows DPI (125%, 150%, 175%)
+function DpiScaleManager() {
+  useEffect(() => {
+    const handleScale = () => {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isDesktop = !isMobile && (window.screen.width >= 1024 || window.innerWidth >= 1024);
+
+      if (isDesktop && window.devicePixelRatio && window.devicePixelRatio > 1) {
+        (document.body.style as any).zoom = (1 / window.devicePixelRatio).toString();
+      } else if (document.body) {
+        (document.body.style as any).zoom = '1';
+      }
+    };
+
+    handleScale();
+    window.addEventListener('resize', handleScale);
+    return () => window.removeEventListener('resize', handleScale);
+  }, []);
+
+  return null;
+}
 
 // Helper component to restore scroll position on route change
 function ScrollToTop() {
@@ -56,8 +77,7 @@ function LayoutWrapper({ children }: { children: React.ReactNode }) {
       {!isAdminRoute && <Navbar />}
       <main className="flex-1">{children}</main>
       {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <BackToTop />}
-      {!isAdminRoute && <ChatbotWidget />}
+      {!isAdminRoute && <WhatsAppWidget />}
     </div>
   );
 }
@@ -66,6 +86,7 @@ export function App() {
   return (
     <AppProvider>
       <Router>
+        <DpiScaleManager />
         <ScrollToTop />
         <LayoutWrapper>
           <Routes>
@@ -82,7 +103,9 @@ export function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* /dashboard redirects to the new attendee portal */}
+            <Route path="/dashboard" element={<Navigate to="/my-portal" replace />} />
+            <Route path="/my-portal" element={<MyPortal />} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />

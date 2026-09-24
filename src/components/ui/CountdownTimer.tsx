@@ -109,20 +109,20 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
     ];
 
     return (
-      <div className={cn('flex items-center justify-center gap-2 sm:gap-4 w-full py-1', className)}>
+      <div className={cn('flex items-center gap-3 sm:gap-5 py-1', className)}>
         {units.map((unit, idx) => {
           const strokeDashoffset = circumference * (1 - unit.progress);
 
           return (
-            <div key={idx} className="flex flex-col items-center flex-1 max-w-[76px] sm:max-w-[88px]">
-              {/* Circular SVG Ring */}
-              <div className="relative w-15 h-15 sm:w-18 sm:h-18 md:w-20 md:h-20 flex items-center justify-center">
+            <div key={idx} className="flex flex-col items-center flex-1 max-w-[72px] sm:max-w-[84px]">
+              {/* Circular SVG Ring (No background box) */}
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 84 84">
                   <defs>
                     <linearGradient id={`circleGrad-${idx}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#088D01" />
-                      <stop offset="50%" stopColor="#72AC00" />
-                      <stop offset="100%" stopColor="#FFE500" />
+                      <stop offset="0%" stopColor="#84cc16" />
+                      <stop offset="60%" stopColor="#a3e635" />
+                      <stop offset="100%" stopColor="#facc15" />
                     </linearGradient>
                   </defs>
 
@@ -132,18 +132,18 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
                     cy="42"
                     r={radius}
                     fill="transparent"
-                    stroke="rgba(255, 255, 255, 0.16)"
-                    strokeWidth="2.5"
+                    stroke="rgba(255, 255, 255, 0.35)"
+                    strokeWidth="2"
                   />
 
-                  {/* Active Glowing Progress Arc with Green & Yellow Gradient */}
+                  {/* Active Glowing Progress Arc with Lime-Yellow Gradient */}
                   <circle
                     cx="42"
                     cy="42"
                     r={radius}
                     fill="transparent"
                     stroke={`url(#circleGrad-${idx})`}
-                    strokeWidth="3.6"
+                    strokeWidth="3.2"
                     strokeLinecap="round"
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeDashoffset}
@@ -152,13 +152,13 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
                 </svg>
 
                 {/* Bold Number in the center */}
-                <span className="absolute font-sans font-black text-xl sm:text-2xl md:text-3xl text-white tracking-tight">
+                <span className="absolute font-sans font-black text-xl sm:text-2xl md:text-2xl text-white tracking-tight">
                   {unit.value}
                 </span>
               </div>
 
               {/* Unit Label below */}
-              <span className="text-[9px] sm:text-[10px] font-medium tracking-widest text-slate-300 mt-2 text-center uppercase">
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-widest text-white/90 mt-2 text-center uppercase">
                 {unit.label}
               </span>
             </div>
@@ -171,7 +171,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
   const pad = (n: number) => n.toString().padStart(2, '0');
 
   const unitStyles = {
-    dark: 'w-14 h-14 sm:w-16 sm:h-16 rounded-xl border bg-cib-charcoal-900/90 text-white border-white/10 shadow-lg font-mono font-bold text-xl sm:text-2xl backdrop-blur-md',
+    dark: 'w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-cib-charcoal-900/90 text-white shadow-lg font-mono font-bold text-xl sm:text-2xl backdrop-blur-md',
     light: 'w-14 h-14 sm:w-16 sm:h-16 rounded-xl border bg-white text-cib-charcoal-900 border-slate-200 shadow-sm font-mono font-bold text-xl sm:text-2xl',
     gold: '',
     circular: '',

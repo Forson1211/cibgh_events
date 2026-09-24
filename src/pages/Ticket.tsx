@@ -60,37 +60,82 @@ export const Ticket: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-16 space-y-8">
-      {/* Top Banner / Actions */}
-      <div className="flex items-center justify-between no-print">
-        <button
-          onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-cib-charcoal"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back</span>
-        </button>
+    <div className="min-h-screen relative py-10 sm:py-16 pb-24">
+      {/* Fixed Full-Viewport Background - Stays static while ticket pass and footer scroll over it */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <img
+          src="/aqua-safari-ticket-bg.jpg"
+          alt="Aqua Safari Resort, Ada - Venue"
+          className="w-full h-full object-cover object-center brightness-100 contrast-100"
+        />
+        {/* Soft light overlay so the resort photo colors show vividly */}
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold text-cib-green-800 bg-cib-green-50 px-3 py-1.5 rounded-lg border border-cib-green-200/60">
-          <ShieldCheck className="w-4 h-4 text-cib-green-700" />
-          <span>Accredited CIB Pass</span>
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10 space-y-6">
+        {/* Top Banner / Actions */}
+        <div className="flex items-center justify-between no-print">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-md rounded-none text-xs font-bold text-slate-900 hover:bg-white shadow-md transition-all active:scale-95"
+          >
+            <ArrowLeft className="w-4 h-4 text-[#008129]" />
+            <span>Back</span>
+          </button>
+
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-900 bg-white/95 backdrop-blur-md px-4 py-2 rounded-none shadow-md">
+            <ShieldCheck className="w-4 h-4 text-[#008129]" />
+            <span>Accredited CIB Pass</span>
+          </div>
+        </div>
+
+        {/* 2-Column Side-by-Side Arrangement (Left: Info Shape, Right: Ticket) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Shape on Left Side */}
+          <div className="lg:col-span-5 space-y-6 no-print">
+            <div className="bg-white rounded-none p-7 sm:p-9 shadow-[0_20px_50px_rgba(0,0,0,0.3)] space-y-4 text-left">
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#008129]">
+                DELEGATE ACCREDITATION
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-display leading-tight">
+                Your Digital Event Ticket
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Please present this digital pass on your smartphone or bring a printed copy to the check-in desk at the venue.
+              </p>
+
+              <div className="pt-4 border-t border-slate-100 space-y-3 text-xs text-slate-700">
+                <div className="flex items-center justify-between py-1">
+                  <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Attendee</span>
+                  <span className="font-bold text-slate-900">{ticket.attendee_name}</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-slate-100">
+                  <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Reference</span>
+                  <span className="font-mono font-bold text-[#008129]">{ticket.registration_number}</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-slate-100">
+                  <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Access Tier</span>
+                  <span className="font-bold text-slate-900">{ticket.registration_tier}</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-slate-100">
+                  <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Status</span>
+                  <span className="inline-flex items-center gap-1 font-bold text-[#008129]">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Verified & Confirmed
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Ticket Card on the Other Side */}
+          <div className="lg:col-span-7 flex justify-center lg:justify-start">
+            <div className="w-full max-w-md">
+              <TicketCard ticket={ticket} showActions={true} />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="text-center space-y-2 no-print">
-        <span className="text-xs font-bold uppercase tracking-widest text-cib-green-700">
-          DELEGATE ACCREDITATION
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-black text-cib-charcoal-900 font-display">
-          Your Digital Event Ticket
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
-          Please present this digital pass on your smartphone or bring a printed copy to the check-in desk at the venue.
-        </p>
-      </div>
-
-      {/* Render Ticket Pass */}
-      <TicketCard ticket={ticket} showActions={true} />
     </div>
   );
 };

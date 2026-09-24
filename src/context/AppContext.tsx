@@ -10,6 +10,10 @@ interface AppContextType {
   sponsors: Sponsor[];
   currentUser: UserProfile;
   setCurrentUser: (user: UserProfile) => void;
+  registeredUserEmail: string | null;
+  setRegisteredUserEmail: (email: string | null) => void;
+  registeredUserName: string | null;
+  setRegisteredUserName: (name: string | null) => void;
   getEventBySlug: (slug: string) => EventItem | undefined;
   getEventById: (id: string) => EventItem | undefined;
   getRegistrationByNumber: (regNumber: string) => Registration | undefined;
@@ -24,9 +28,11 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const STORAGE_KEY_EVENTS = 'cib_ghana_events_v1';
+const STORAGE_KEY_EVENTS = 'cib_ghana_events_v2';
 const STORAGE_KEY_REGS = 'cib_ghana_registrations_v1';
 const STORAGE_KEY_USER = 'cib_ghana_current_user_v1';
+const STORAGE_KEY_REG_EMAIL = 'cib_ghana_registered_email_v1';
+const STORAGE_KEY_REG_NAME = 'cib_ghana_registered_name_v1';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [events, setEvents] = useState<EventItem[]>(() => {
@@ -55,6 +61,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return DEMO_USERS[0]; // default to SUPER_ADMIN for rich evaluation
   });
+
+  const [registeredUserEmail, setRegisteredUserEmailState] = useState<string | null>(() => {
+    return localStorage.getItem(STORAGE_KEY_REG_EMAIL) || null;
+  });
+
+  const setRegisteredUserEmail = (email: string | null) => {
+    setRegisteredUserEmailState(email);
+    if (email) {
+      localStorage.setItem(STORAGE_KEY_REG_EMAIL, email);
+    } else {
+      localStorage.removeItem(STORAGE_KEY_REG_EMAIL);
+    }
+  };
+
+  const [registeredUserName, setRegisteredUserNameState] = useState<string | null>(() => {
+    return localStorage.getItem(STORAGE_KEY_REG_NAME) || null;
+  });
+
+  const setRegisteredUserName = (name: string | null) => {
+    setRegisteredUserNameState(name);
+    if (name) {
+      localStorage.setItem(STORAGE_KEY_REG_NAME, name);
+    } else {
+      localStorage.removeItem(STORAGE_KEY_REG_NAME);
+    }
+  };
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(events));
@@ -183,6 +215,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         sponsors,
         currentUser,
         setCurrentUser,
+        registeredUserEmail,
+        setRegisteredUserEmail,
+        registeredUserName,
+        setRegisteredUserName,
         getEventBySlug,
         getEventById,
         getRegistrationByNumber,

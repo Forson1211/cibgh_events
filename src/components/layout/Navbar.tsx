@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu,
   X,
@@ -20,10 +21,9 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
-  const [homeDropdownOpen, setHomeDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useApp();
+  const { currentUser, setCurrentUser, registeredUserEmail } = useApp();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +37,6 @@ export const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
     setPartnersDropdownOpen(false);
-    setHomeDropdownOpen(false);
   }, [location.pathname]);
 
   const isActive = (path: string) => {
@@ -54,12 +53,12 @@ export const Navbar: React.FC = () => {
           : 'bg-white border-b border-slate-100 shadow-sm py-2 sm:py-2.5'
       }`}
     >
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-50 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo - Aligned flush with container margin */}
           <Link to="/" className="flex items-center group focus:outline-none py-1 -ml-2.5 sm:-ml-3 md:-ml-3.5">
             <img
-              src={CIB_LOGO_URL}
+              src="/cib-logo-navbar.png"
               alt="Chartered Institute of Bankers, Ghana"
               className="h-14 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
             />
@@ -67,40 +66,15 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Navigation Links - Large, Clear & Legible */}
           <nav className="hidden lg:flex items-center gap-1.5 xl:gap-3">
-            {/* Home with dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setHomeDropdownOpen(!homeDropdownOpen)}
-                className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
-                  isActive('/') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
-                }`}
-              >
-                <span>Home</span>
-                <ChevronDown className="w-4 h-4 text-slate-600" />
-              </button>
-              {homeDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-72 bg-white rounded-none shadow-2xl border border-slate-300 p-2 z-50 animate-in fade-in slide-in-from-top-2">
-                  <Link
-                    to="/"
-                    className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
-                  >
-                    Flagship 30th Conference
-                  </Link>
-                  <Link
-                    to="/about"
-                    className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
-                  >
-                    Our Institutional Story
-                  </Link>
-                  <Link
-                    to="/past-events"
-                    className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
-                  >
-                    Conference Proceedings Archive
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Home - Direct Link, No Dropdown */}
+            <Link
+              to="/"
+              className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
+                isActive('/') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
+              }`}
+            >
+              Home
+            </Link>
 
             {/* Programme */}
             <Link
@@ -142,6 +116,7 @@ export const Navbar: React.FC = () => {
                   </a>
                   <Link
                     to="/contact"
+                    onClick={() => setPartnersDropdownOpen(false)}
                     className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
                   >
                     Become a Sponsor / Exhibitor
@@ -161,82 +136,197 @@ export const Navbar: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right Action Cluster - Clean Register CTA only */}
+          {/* Right Action Cluster */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* High-Contrast Sharp Register Now ↗ Button with exact green to yellow gradient */}
-            <Link
-              to="/events/30th-national-banking-ethics-conference-2026/register"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-extrabold text-sm sm:text-base transition-all duration-200 shadow-md"
-            >
-              <span>Register Now</span>
-              <ArrowUpRight className="w-4 h-4 text-white stroke-[2.5]" />
-            </Link>
+            {registeredUserEmail ? (
+              <Link
+                to="/my-portal"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-extrabold text-sm sm:text-base transition-all duration-200 shadow-md"
+              >
+                <User className="w-4 h-4" />
+                <span>My Portal</span>
+              </Link>
+            ) : (
+              <Link
+                to="/events/30th-national-banking-ethics-conference-2026/register"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-extrabold text-sm sm:text-base transition-all duration-200 shadow-md"
+              >
+                <span>Register Now</span>
+                <ArrowUpRight className="w-4 h-4 text-white stroke-[2.5]" />
+              </Link>
+            )}
           </div>
 
           {/* Mobile Hamburger Button */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-slate-800 hover:bg-slate-100 focus:outline-none"
+              className="p-1.5 text-slate-900 bg-transparent border-0 shadow-none outline-none focus:outline-none active:opacity-70 transition-opacity"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <AnimatePresence mode="wait" initial={false}>
+                {mobileMenuOpen ? (
+                  <motion.div
+                    key="close-icon"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu-icon"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-1.5 shadow-2xl text-slate-900">
-          <Link
-            to="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-none text-base font-bold hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] text-slate-900 transition-all"
+      {/* Mobile Menu Drawer Overlay (Pure solid white, overlays on top without pushing content down) */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            key="mobile-menu-drawer"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="absolute top-full left-0 right-0 z-50 bg-white border-t border-b border-slate-200 shadow-2xl px-4 sm:px-6 pt-3 pb-6 space-y-1.5 lg:hidden text-slate-900 max-h-[calc(100dvh-75px)] overflow-y-auto"
           >
-            Home
-          </Link>
-          <Link
-            to="/events"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-none text-base font-bold hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] text-slate-900 transition-all"
-          >
-            Programme
-          </Link>
-          <Link
-            to="/speakers"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-none text-base font-bold hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] text-slate-900 transition-all"
-          >
-            Speakers
-          </Link>
-          <Link
-            to="/resources"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-none text-base font-bold hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] text-slate-900 transition-all"
-          >
-            News
-          </Link>
-          <Link
-            to="/about"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-none text-base font-bold hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] text-slate-900 transition-all"
-          >
-            About CIB Ghana
-          </Link>
-
-          <div className="pt-4 border-t border-slate-200 space-y-2">
             <Link
-              to="/events/30th-national-banking-ethics-conference-2026/register"
+              to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-black text-base shadow-md transition-all"
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                isActive('/')
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
             >
-              <span>Register Now</span>
-              <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+              <span>Home</span>
             </Link>
-          </div>
-        </div>
-      )}
+
+            <Link
+              to="/events"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                isActive('/events')
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
+            >
+              <span>Programme</span>
+            </Link>
+
+            <Link
+              to="/speakers"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                isActive('/speakers')
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
+            >
+              <span>Speakers</span>
+            </Link>
+
+            {/* Partners & Sponsors with Expandable Submenu */}
+            <div className="border-l-4 border-transparent">
+              <button
+                onClick={() => setPartnersDropdownOpen(!partnersDropdownOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 text-base font-bold text-slate-900 hover:text-[#008129] hover:bg-slate-50 transition-all"
+              >
+                <span>Partners & Sponsors</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    partnersDropdownOpen ? 'rotate-180 text-[#008129]' : 'text-slate-600'
+                  }`}
+                />
+              </button>
+              {partnersDropdownOpen && (
+                <div className="pl-6 pr-2 py-1 space-y-1 bg-slate-50 border-l-2 border-[#008129]/30 ml-4 my-1">
+                  <a
+                    href="#partners"
+                    onClick={() => {
+                      setPartnersDropdownOpen(false);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block px-3 py-2 text-sm font-semibold text-slate-800 hover:text-[#008129]"
+                  >
+                    Institutional Partners
+                  </a>
+                  <Link
+                    to="/contact"
+                    onClick={() => {
+                      setPartnersDropdownOpen(false);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block px-3 py-2 text-sm font-semibold text-slate-800 hover:text-[#008129]"
+                  >
+                    Become a Sponsor / Exhibitor
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link
+              to="/resources"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                isActive('/resources')
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
+            >
+              <span>News</span>
+            </Link>
+
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                isActive('/about')
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
+            >
+              <span>About CIB Ghana</span>
+            </Link>
+
+            <div className="pt-4 border-t border-slate-200 space-y-2">
+              {registeredUserEmail ? (
+                <Link
+                  to="/my-portal"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-black text-base shadow-md transition-all"
+                >
+                  <User className="w-4 h-4" />
+                  <span>My Portal</span>
+                </Link>
+              ) : (
+                <Link
+                  to="/events/30th-national-banking-ethics-conference-2026/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-none bg-gradient-to-r from-[#088d01] via-[#72ac00] to-[#dccb00] hover:brightness-105 active:scale-95 text-white font-black text-base shadow-md transition-all"
+                >
+                  <span>Register Now</span>
+                  <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                </Link>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
+
