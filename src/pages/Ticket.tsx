@@ -62,10 +62,13 @@ export const Ticket: React.FC = () => {
   return (
     <div className="min-h-screen relative py-10 sm:py-16 pb-24">
       {/* Fixed Full-Viewport Background - Stays static while ticket pass and footer scroll over it */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#032616]">
         <img
           src="/aqua-safari-ticket-bg.jpg"
           alt="Aqua Safari Resort, Ada - Venue"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
           className="w-full h-full object-cover object-center brightness-100 contrast-100"
         />
         {/* Soft light overlay so the resort photo colors show vividly */}
