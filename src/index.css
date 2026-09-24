@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --cib-green: #0A5C36;
+    --cib-green-dark: #064225;
+    --cib-red: #C41230;
+    --cib-gold: #D4AF37;
+    --cib-charcoal: #0F172A;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-cib-charcoal antialiased overflow-x-hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-cib-charcoal;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(10, 92, 54, 0.08);
+  }
+
+  .glass-dark {
+    background: rgba(10, 31, 20, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #F5A623 0%, #D4AF37 50%, #C4971E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-green {
+    background: linear-gradient(135deg, #0A5C36 0%, #0E7A48 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bg-radial-glow {
+    background: radial-gradient(circle at 50% 0%, rgba(10, 92, 54, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  }
+
+  .bg-subtle-mesh {
+    background-color: #ffffff;
+    background-image: radial-gradient(rgba(10, 92, 54, 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .bg-cib-gradient-btn {
+    background: linear-gradient(90deg, #088d01 0%, #72ac00 50%, #dccb00 100%);
+  }
+}
+
+/* 3-Row Infinite Gallery Marquee Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 40s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 40s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-speakers {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 60s linear infinite;
+  will-change: transform;
+}
+
+.marquee-container:hover .animate-marquee-left,
+.marquee-container:hover .animate-marquee-right,
+.marquee-container:hover .animate-marquee-speakers {
+  animation-play-state: paused;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Print optimizations for Tickets and Certificates */
+@media print {
+  nav, footer, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .print-only-container {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
