@@ -14,7 +14,7 @@ import { Speakers } from './pages/Speakers';
 import { PastEvents } from './pages/PastEvents';
 import { Resources } from './pages/Resources';
 import { Contact } from './pages/Contact';
-import { About } from './pages/About';
+
 import { PartnersSponsors } from './pages/PartnersSponsors';
 import { Login } from './pages/Login';
 import { MyPortal } from './pages/MyPortal';
@@ -141,7 +141,7 @@ export function App() {
             <Route path="/speakers" element={<Speakers />} />
             <Route path="/partners" element={<PartnersSponsors />} />
             <Route path="/sponsors" element={<PartnersSponsors />} />
-            <Route path="/about" element={<About />} />
+
             <Route path="/past-events" element={<PastEvents />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/contact" element={<Contact />} />
