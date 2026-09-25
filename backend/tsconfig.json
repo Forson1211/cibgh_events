@@ -10,7 +10,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "../node_modules/@types",
+      "./node_modules/@types"
+    ],
+    "composite": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

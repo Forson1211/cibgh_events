@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { EventItem, Registration, UserProfile, Speaker, Sponsor } from '../types';
 import { MOCK_EVENTS, MOCK_REGISTRATIONS, DEMO_USERS, MOCK_SPEAKERS, MOCK_SPONSORS } from '../data/mockData';
 import { generateRegistrationNumber } from '../lib/utils';
+import { ApiClient } from '../lib/api';
 
 interface AppContextType {
   events: EventItem[];
@@ -100,6 +101,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
   }, [currentUser]);
 
+  // Synchronize events from the backend engine when available
+  useEffect(() => {
+    ApiClient.getEvents()
+      .then((res) => {
+        if (res.success && res.data && res.data.length > 0) {
+          setEvents((prev) => {
+            const backendIds = new Set(res.data.map((e) => e.id));
+            const localOnly = prev.filter((e) => !backendIds.has(e.id));
+            return [...res.data, ...localOnly];
+          });
+        }
+      })
+      .catch(() => {
+        // Backend not yet running or offline; local state remains active
+      });
+  }, []);
+
   const getEventBySlug = (slug: string) => events.find((e) => e.slug === slug);
   const getEventById = (id: string) => events.find((e) => e.id === id);
   const getRegistrationByNumber = (regNumber: string) => 
@@ -114,6 +132,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setRegistrations((prev) => [newReg, ...prev]);
+
+    // Dispatch registration asynchronously to backend API
+    ApiClient.createRegistration({
+      event_id: regData.event_id,
+      registration_type_id: regData.registration_type_id,
+      first_name: regData.first_name,
+      last_name: regData.last_name,
+      email: regData.email,
+      phone: regData.phone,
+      organization: regData.organization,
+      job_title: regData.job_title,
+      country: regData.country,
+      cib_member_id: regData.cib_member_id,
+      attendance_type: regData.attendance_type,
+      dietary_requirements: regData.dietary_requirements,
+      special_assistance: regData.special_assistance,
+    }).catch((err) => {
+      console.log('[AppContext] Backend registration sync notice:', err);
+    });
 
     // increment event registered count
     setEvents((prev) =>
@@ -159,6 +196,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const updatedList = [...registrations];
     updatedList[regIndex] = updatedReg;
     setRegistrations(updatedList);
+
+    // Sync check-in status with backend engine
+    ApiClient.checkInAttendee(cleanNumber).catch((err) => {
+      console.log('[AppContext] Backend check-in sync:', err);
+    });
 
     return {
       success: true,

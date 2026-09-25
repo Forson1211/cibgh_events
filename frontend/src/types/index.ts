@@ -223,3 +223,20 @@ export interface WaitlistEntry {
   created_at: string;
   status: 'PENDING' | 'INVITED' | 'CANCELLED';
 }
+
+export interface CreateRegistrationRequest {
+  event_id: string;
+  registration_type_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  organization: string;
+  job_title: string;
+  country?: string;
+  cib_member_id?: string;
+  attendance_type: AttendanceType;
+  dietary_requirements?: string;
+  special_assistance?: string;
+}
+

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { Registration } from '../types';
 import {
   CalendarDays,
   MapPin,
@@ -41,7 +42,7 @@ export const MyPortal: React.FC = () => {
   const rawRegistrations = useMemo(() => {
     if (!registeredUserEmail) return [];
     return registrations.filter(
-      (r) => r.email.trim().toLowerCase() === registeredUserEmail.trim().toLowerCase()
+      (r: Registration) => r.email.trim().toLowerCase() === registeredUserEmail.trim().toLowerCase()
     );
   }, [registrations, registeredUserEmail]);
 
@@ -68,7 +69,7 @@ export const MyPortal: React.FC = () => {
       return registeredUserName.trim();
     }
     const foundReg = rawRegistrations.find(
-      (r) => r.first_name && r.first_name.trim() && r.first_name.toLowerCase() !== 'delegate'
+      (r: Registration) => r.first_name && r.first_name.trim() && r.first_name.toLowerCase() !== 'delegate'
     );
     if (foundReg && foundReg.first_name.trim()) {
       return foundReg.first_name.trim();
