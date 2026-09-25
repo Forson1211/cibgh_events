@@ -1,37 +1,22 @@
 {
-  "name": "cib-ghana",
+  "name": "cib-ghana-monorepo",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.116.0",
-    "@types/canvas-confetti": "^1.9.0",
-    "autoprefixer": "^10.6.1",
-    "canvas-confetti": "^1.9.4",
-    "clsx": "^2.1.1",
-    "framer-motion": "^13.4.0",
-    "lucide-react": "^1.47.0",
-    "postcss": "^8.5.28",
-    "qrcode.react": "^4.2.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.4",
-    "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^3.4.19"
+    "dev": "concurrently -k -n \"FRONTEND,BACKEND\" -c \"cyan.bold,green.bold\" \"npm run dev --workspace=cib-ghana-frontend\" \"npm run dev --workspace=cib-ghana-backend\"",
+    "dev:frontend": "npm run dev --workspace=cib-ghana-frontend",
+    "dev:backend": "npm run dev --workspace=cib-ghana-backend",
+    "build": "npm run build --workspace=cib-ghana-frontend && npm run build --workspace=cib-ghana-backend",
+    "build:frontend": "npm run build --workspace=cib-ghana-frontend",
+    "build:backend": "npm run build --workspace=cib-ghana-backend",
+    "start": "npm run start --workspace=cib-ghana-backend",
+    "lint": "npm run lint --workspace=cib-ghana-frontend"
   },
   "devDependencies": {
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.81.0",
-    "typescript": "~6.0.2",
-    "vite": "^8.3.0"
+    "concurrently": "^9.1.2"
   }
 }

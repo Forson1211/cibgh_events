@@ -1,0 +1,205 @@
+export type UserRole = 'SUPER_ADMIN' | 'EVENT_ADMIN' | 'STAFF' | 'ATTENDEE';
+
+export type EventStatus = 
+  | 'DRAFT' 
+  | 'UPCOMING' 
+  | 'OPEN_FOR_REGISTRATION' 
+  | 'REGISTRATION_CLOSED' 
+  | 'IN_PROGRESS' 
+  | 'COMPLETED' 
+  | 'CANCELLED';
+
+export type AttendanceType = 'PHYSICAL' | 'VIRTUAL' | 'HYBRID';
+
+export type PaymentStatus = 'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'REFUNDED';
+
+export type CheckInStatus = 'REGISTERED' | 'CHECKED_IN' | 'CANCELLED';
+
+export type SponsorTier = 'PLATINUM' | 'GOLD' | 'SILVER' | 'PARTNER' | 'ACADEMIC';
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone?: string;
+  organization?: string;
+  job_title?: string;
+  country?: string;
+  cib_member_id?: string;
+  role: UserRole;
+  avatar_url?: string;
+  created_at: string;
+}
+
+export interface Speaker {
+  id: string;
+  name: string;
+  slug: string;
+  position: string;
+  organization: string;
+  country: string;
+  photo_url: string;
+  biography: string;
+  expertise: string[];
+  is_keynote?: boolean;
+  linkedin_url?: string;
+  twitter_url?: string;
+  website_url?: string;
+}
+
+export interface AgendaSession {
+  id: string;
+  event_id: string;
+  day_number: number;
+  date: string;
+  start_time: string;
+  end_time: string;
+  title: string;
+  description?: string;
+  session_type: 'KEYNOTE' | 'PANEL' | 'WORKSHOP' | 'BREAKOUT' | 'NETWORKING' | 'CEREMONY' | 'MASTERCLASS';
+  room: string;
+  track?: string;
+  speaker_ids: string[];
+}
+
+export interface Sponsor {
+  id: string;
+  name: string;
+  logo_url: string;
+  website_url?: string;
+  tier: SponsorTier;
+  description?: string;
+}
+
+export interface RegistrationType {
+  id: string;
+  event_id: string;
+  name: string;
+  code: string;
+  price: number;
+  currency: string;
+  description: string;
+  eligibility?: string;
+  capacity?: number;
+  spots_left?: number;
+  benefits: string[];
+}
+
+export interface EventItem {
+  id: string;
+  title: string;
+  slug: string;
+  tagline: string;
+  description: string;
+  short_description: string;
+  category: string;
+  category_id: string;
+  featured_image: string;
+  banner_image?: string;
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  location: string;
+  venue: string;
+  venue_address?: string;
+  virtual_link?: string;
+  event_type: AttendanceType;
+  registration_fee: number;
+  currency: string;
+  capacity: number;
+  registered_count: number;
+  registration_deadline: string;
+  status: EventStatus;
+  is_featured: boolean;
+  is_past?: boolean;
+  themes?: string[];
+  speakers: Speaker[];
+  agenda: AgendaSession[];
+  sponsors: Sponsor[];
+  registration_types: RegistrationType[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Registration {
+  id: string;
+  event_id: string;
+  event_title: string;
+  user_id?: string;
+  registration_number: string;
+  registration_type_id: string;
+  registration_type_name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  organization: string;
+  job_title: string;
+  country: string;
+  cib_member_id?: string;
+  attendance_type: AttendanceType;
+  dietary_requirements?: string;
+  special_assistance?: string;
+  total_amount: number;
+  currency: string;
+  payment_status: PaymentStatus;
+  payment_reference?: string;
+  payment_method?: 'PAYSTACK_CARD' | 'PAYSTACK_MOMO' | 'BANK_TRANSFER' | 'COMPLIMENTARY';
+  check_in_status: CheckInStatus;
+  check_in_time?: string;
+  created_at: string;
+}
+
+export interface DigitalTicket {
+  id: string;
+  registration_id: string;
+  registration_number: string;
+  event_id: string;
+  event_title: string;
+  event_date: string;
+  event_venue: string;
+  attendee_name: string;
+  attendee_email: string;
+  organization: string;
+  registration_tier: string;
+  attendance_type: AttendanceType;
+  qr_code_data: string;
+  security_hash: string;
+  issue_date: string;
+  check_in_status: CheckInStatus;
+}
+
+export interface CreateRegistrationRequest {
+  event_id: string;
+  registration_type_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  organization: string;
+  job_title: string;
+  country?: string;
+  cib_member_id?: string;
+  attendance_type: AttendanceType;
+  dietary_requirements?: string;
+  special_assistance?: string;
+}
+
+export interface InitializePaymentRequest {
+  registration_id: string;
+  email: string;
+  amount: number; // in GHS
+  callback_url?: string;
+  channels?: ('card' | 'mobile_money')[];
+}
+
+export interface VerifyPaymentRequest {
+  reference: string;
+}
+
+export interface VerifyQrRequest {
+  qr_data: string;
+  event_id?: string;
+}
