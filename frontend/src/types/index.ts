@@ -169,6 +169,7 @@ export interface Registration {
   job_title: string;
   country: string;
   cib_member_id?: string;
+  membership_category?: string;
   attendance_type: AttendanceType;
   dietary_requirements?: string;
   special_assistance?: string;
@@ -235,8 +236,20 @@ export interface CreateRegistrationRequest {
   job_title: string;
   country?: string;
   cib_member_id?: string;
+  membership_category?: string;
   attendance_type: AttendanceType;
   dietary_requirements?: string;
   special_assistance?: string;
+  // Optional registration & payment metadata
+  id?: string;
+  registration_number?: string;
+  event_title?: string;
+  registration_type_name?: string;
+  total_amount?: number;
+  currency?: string;
+  payment_status?: PaymentStatus;
+  payment_reference?: string;
+  payment_method?: 'PAYSTACK_CARD' | 'PAYSTACK_MOMO' | 'BANK_TRANSFER' | 'COMPLIMENTARY';
+  check_in_status?: CheckInStatus;
 }
 

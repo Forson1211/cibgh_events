@@ -190,7 +190,7 @@ export const MyPortal: React.FC = () => {
               to="/events"
               className="inline-flex items-center gap-2 mt-4 px-7 py-3 bg-[#008129] hover:bg-[#007024] text-white font-bold text-sm transition-all"
             >
-              <span>Browse Programme</span>
+              <span>Browse Events</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

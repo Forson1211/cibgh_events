@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { ShieldCheck, Award, Users, BookOpen, ExternalLink, ArrowRight } from 'lucide-react';
+import { Award, Users, BookOpen, ExternalLink, ArrowRight } from 'lucide-react';
 import { CIB_LOGO_URL } from '../data/mockData';
 import { Button } from '../components/ui/Button';
 import { useNavigate, Link } from 'react-router-dom';
@@ -47,11 +47,6 @@ export const About: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-2 sm:space-y-3 relative z-10"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-white/10 border border-white/20 text-xs font-black uppercase tracking-widest text-white/90">
-            <ShieldCheck className="w-4 h-4" />
-            <span>Chartered Mandate &bull; Act 991</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-tight">
             About CIB Ghana
           </h1>

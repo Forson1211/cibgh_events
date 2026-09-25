@@ -15,7 +15,8 @@ import {
   ArrowRight,
   Clock,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Navigation
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge, AttendanceTypeBadge, EventStatusBadge } from '../components/ui/Badge';
@@ -324,22 +325,43 @@ export const EventDetails: React.FC = () => {
         </section>
       )}
 
-      {/* 6. VENUE DETAILS */}
-      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 overflow-hidden relative border border-slate-800">
-          <div className="max-w-2xl space-y-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-cib-gold-400">
-              LOCATION & VENUE
-            </span>
-            <h3 className="text-2xl sm:text-4xl font-black font-display text-white">
-              {event.venue}
-            </h3>
-            <p className="text-sm sm:text-base text-slate-300">
-              {event.venue_address || `${event.location}, Ghana`}
-            </p>
-            <p className="text-xs text-slate-400 leading-relaxed pt-2">
-              Onsite parking, translation booths, high-speed delegate Wi-Fi, and corporate accommodation rates are coordinated for registered CIB attendees.
-            </p>
+      {/* 6. THE VENUE SHOWCASE */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
+        <div className="text-left space-y-2 max-w-2xl">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#008129]">
+            THE VENUE
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-cib-charcoal-900 font-display text-left">
+            Aqua Safari, Ada
+          </h2>
+          <div className="w-12 h-1 bg-[#008129] rounded-none" />
+        </div>
+
+        {/* Venue Showcase Card */}
+        <div className="relative rounded-none overflow-hidden border border-slate-200 shadow-xl group w-full">
+          <div className="relative h-[340px] sm:h-[440px] w-full overflow-hidden">
+            <img
+              src="/aqua-safari-deck.jpg"
+              alt="Aqua Safari Resort, Ada"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+
+            {/* Overlaid Badges & Buttons */}
+            <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center px-3 py-1.5 bg-[#F5A623] text-black font-black text-xs uppercase tracking-wider">
+                OFFICIAL LOCATION
+              </span>
+              <a
+                href="https://maps.google.com/?q=Aqua+Safari+Resort+Ada+Foah+Ghana"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 text-xs font-bold transition-all shadow-md active:scale-95"
+              >
+                <Navigation className="w-3.5 h-3.5 text-[#008129]" />
+                <span>Get Directions</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -385,29 +407,6 @@ export const EventDetails: React.FC = () => {
         </section>
       )}
 
-      {/* 8. BOTTOM REGISTRATION CALL TO ACTION */}
-      {isRegistrationOpen && (
-        <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-cib-green-900 to-cib-charcoal-950 p-8 sm:p-12 rounded-3xl text-white text-center space-y-6 shadow-xl">
-            <h2 className="text-2xl sm:text-4xl font-black font-display">
-              Secure Your Seat at {event.title}
-            </h2>
-            <p className="max-w-xl mx-auto text-sm sm:text-base text-emerald-200">
-              Join senior banking peers, regulatory heads, and ethical leaders. Limited delegate seats available.
-            </p>
-            <div>
-              <Button
-                variant="accent"
-                size="xl"
-                showArrow
-                onClick={() => navigate(`/events/${event.slug}/register`)}
-              >
-                Proceed to Registration
-              </Button>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Sticky Mobile Registration Bar (Requirement #55) */}
       {isRegistrationOpen && (

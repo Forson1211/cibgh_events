@@ -1,5 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
 import { config } from './config/index.js';
 import eventRoutes from './routes/eventRoutes.js';
 import registrationRoutes from './routes/registrationRoutes.js';
@@ -39,6 +41,23 @@ export function createApp(): Express {
   app.use('/api/payments', paymentRoutes);
   app.use('/api/tickets', ticketRoutes);
   app.use('/api/admin', adminRoutes);
+
+  // Email Preview Route (allows instant browser preview of dispatched payment receipt & pass)
+  app.get('/api/emails/preview/:regNumber', (req: Request, res: Response) => {
+    const { regNumber } = req.params;
+    const previewDir = path.resolve(process.cwd(), 'scratch', 'email_previews');
+    const filePath = path.join(previewDir, `receipt_${regNumber}.html`);
+    if (fs.existsSync(filePath)) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(fs.readFileSync(filePath, 'utf-8'));
+    }
+    res.status(404).send(`
+      <div style="font-family: sans-serif; padding: 40px; text-align: center;">
+        <h2>Email Preview Not Found</h2>
+        <p>No preview generated yet for registration number: <strong>${regNumber}</strong></p>
+      </div>
+    `);
+  });
 
   // 404 Handler
   app.use((req: Request, res: Response) => {

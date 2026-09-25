@@ -119,11 +119,8 @@ export const Events: React.FC = () => {
           className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
           <div className="text-left max-w-3xl space-y-2 sm:space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-white/90">
-              ACCREDITED BANKING LEARNING
-            </span>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase">
-              Programmes
+              Events
             </h1>
             <p className="text-white/95 text-sm sm:text-base leading-relaxed max-w-2xl font-medium">
               Browse CIB Ghana's accredited conferences, executive workshops, risk masterclasses, and networking forums.
@@ -146,10 +143,10 @@ export const Events: React.FC = () => {
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search programmes by title, topic, theme, or venue..."
+                placeholder="Search events by title, topic, theme, or venue..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:border-cib-green-600 focus:outline-none bg-white"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-base sm:text-xs focus:border-cib-green-600 focus:outline-none bg-white"
               />
             </div>
 
@@ -203,7 +200,7 @@ export const Events: React.FC = () => {
               >
                 <option value="ALL">All Pricing (Free & Paid)</option>
                 <option value="FREE">Free Admission</option>
-                <option value="PAID">Paid Programmes</option>
+                <option value="PAID">Paid Events</option>
               </select>
 
               {/* Location */}
@@ -230,7 +227,7 @@ export const Events: React.FC = () => {
             </div>
 
             <div className="text-slate-500 font-medium">
-              Showing <strong className="text-cib-charcoal-900">{filteredEvents.length}</strong> available programmes
+              Showing <strong className="text-cib-charcoal-900">{filteredEvents.length}</strong> available events
             </div>
           </div>
         </motion.div>
@@ -241,7 +238,7 @@ export const Events: React.FC = () => {
             <Search className="w-12 h-12 text-slate-400 mx-auto" />
             <h3 className="text-xl font-bold text-cib-charcoal-900">No Matching Events Found</h3>
             <p className="text-sm text-slate-500 max-w-md mx-auto">
-              Try adjusting your search criteria or resetting filters to explore all CIB Ghana calendar programmes.
+              Try adjusting your search criteria or resetting filters to explore all CIB Ghana calendar events.
             </p>
             <Button variant="primary" size="md" onClick={clearFilters}>
               Reset All Filters

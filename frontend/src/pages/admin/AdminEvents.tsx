@@ -13,7 +13,8 @@ import {
   Sparkles,
   CheckCircle2,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { EventStatusBadge, AttendanceTypeBadge } from '../../components/ui/Badge';
@@ -25,6 +26,7 @@ export const AdminEvents: React.FC = () => {
   const { events, toggleEventPublish, toggleEventFeatured, deleteEvent, addEvent } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filteredEvents = events.filter((e) => {
     const matchesStatus = selectedStatus === 'ALL' || e.status === selectedStatus;
@@ -49,9 +51,14 @@ export const AdminEvents: React.FC = () => {
     addEvent(duplicated);
   };
 
-  const handleDelete = (id: string, title: string) => {
-    if (confirm(`Are you sure you want to delete "${title}"?`)) {
-      deleteEvent(id);
+  const handleDelete = async (id: string, title: string) => {
+    if (confirm(`Are you sure you want to delete "${title}"? This will permanently remove the event from the database.`)) {
+      setDeletingId(id);
+      try {
+        await deleteEvent(id);
+      } finally {
+        setDeletingId(null);
+      }
     }
   };
 
@@ -223,11 +230,16 @@ export const AdminEvents: React.FC = () => {
 
                           {/* Delete */}
                           <button
+                            disabled={deletingId === evt.id}
                             onClick={() => handleDelete(evt.id, evt.title)}
-                            className="p-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50"
+                            className="p-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 disabled:opacity-50"
                             title="Delete Event"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            {deletingId === evt.id ? (
+                              <RefreshCw className="w-3.5 h-3.5 animate-spin text-rose-600" />
+                            ) : (
+                              <Trash2 className="w-3.5 h-3.5" />
+                            )}
                           </button>
                         </div>
                       </td>

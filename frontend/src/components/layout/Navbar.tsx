@@ -20,7 +20,6 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, setCurrentUser, registeredUserEmail } = useApp();
@@ -36,13 +35,34 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
-    setPartnersDropdownOpen(false);
   }, [location.pathname]);
 
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
     return false;
+  };
+
+  const handleHomeNavigation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    setUserDropdownOpen(false);
+
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      document.body.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      document.body.scrollTop = 0;
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        document.body.scrollTop = 0;
+      }, 50);
+    }
   };
 
   return (
@@ -56,7 +76,11 @@ export const Navbar: React.FC = () => {
       <div className="relative z-50 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center group focus:outline-none py-1 ml-0.5 sm:-ml-2 md:-ml-3.5">
+          <Link
+            to="/"
+            onClick={handleHomeNavigation}
+            className="flex items-center group focus:outline-none py-1 ml-0.5 sm:-ml-2 md:-ml-3.5 cursor-pointer"
+          >
             <img
               src="/cib-logo-navbar.png"
               alt="Chartered Institute of Bankers, Ghana"
@@ -69,6 +93,7 @@ export const Navbar: React.FC = () => {
             {/* Home - Direct Link, No Dropdown */}
             <Link
               to="/"
+              onClick={handleHomeNavigation}
               className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
                 isActive('/') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
               }`}
@@ -76,14 +101,14 @@ export const Navbar: React.FC = () => {
               Home
             </Link>
 
-            {/* Programme */}
+            {/* Events */}
             <Link
               to="/events"
               className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
                 isActive('/events') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
               }`}
             >
-              Programme
+              Events
             </Link>
 
             {/* Speakers */}
@@ -96,43 +121,36 @@ export const Navbar: React.FC = () => {
               Speakers
             </Link>
 
-            {/* Partners & Sponsors with dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setPartnersDropdownOpen(!partnersDropdownOpen)}
-                className="flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-none text-base font-bold text-slate-900 hover:text-[#008129] transition-colors"
-              >
-                <span>Partners & Sponsors</span>
-                <ChevronDown className="w-4 h-4 text-slate-600" />
-              </button>
-              {partnersDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-72 bg-white rounded-none shadow-2xl border border-slate-300 p-2 z-50 animate-in fade-in slide-in-from-top-2">
-                  <a
-                    href="#partners"
-                    onClick={() => setPartnersDropdownOpen(false)}
-                    className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
-                  >
-                    Institutional Partners
-                  </a>
-                  <Link
-                    to="/contact"
-                    onClick={() => setPartnersDropdownOpen(false)}
-                    className="block px-4 py-3 rounded-none text-base font-bold text-slate-900 hover:bg-[#008129]/10 hover:text-[#008129] border-l-2 border-transparent hover:border-[#008129] transition-all"
-                  >
-                    Become a Sponsor / Exhibitor
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Partners & Sponsors */}
+            <Link
+              to="/partners"
+              className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
+                location.pathname === '/partners' || location.pathname === '/sponsors'
+                  ? 'text-[#008129] font-black'
+                  : 'text-slate-900 hover:text-[#008129]'
+              }`}
+            >
+              Partners &amp; Sponsors
+            </Link>
 
-            {/* News */}
+            {/* Resources */}
             <Link
               to="/resources"
               className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
                 isActive('/resources') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
               }`}
             >
-              News
+              Resources
+            </Link>
+
+            {/* Contact */}
+            <Link
+              to="/contact"
+              className={`px-2.5 xl:px-3 py-2 rounded-none text-base font-bold transition-colors ${
+                isActive('/contact') ? 'text-[#008129] font-black' : 'text-slate-900 hover:text-[#008129]'
+              }`}
+            >
+              Contact
             </Link>
           </nav>
 
@@ -205,7 +223,10 @@ export const Navbar: React.FC = () => {
           >
             <Link
               to="/"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                setMobileMenuOpen(false);
+                handleHomeNavigation(e);
+              }}
               className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
                 isActive('/')
                   ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
@@ -224,7 +245,7 @@ export const Navbar: React.FC = () => {
                   : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
               }`}
             >
-              <span>Programme</span>
+              <span>Events</span>
             </Link>
 
             <Link
@@ -239,44 +260,20 @@ export const Navbar: React.FC = () => {
               <span>Speakers</span>
             </Link>
 
-            {/* Partners & Sponsors with Expandable Submenu */}
-            <div className="border-l-4 border-transparent">
-              <button
-                onClick={() => setPartnersDropdownOpen(!partnersDropdownOpen)}
-                className="flex items-center justify-between w-full px-4 py-3 text-base font-bold text-slate-900 hover:text-[#008129] hover:bg-slate-50 transition-all"
-              >
-                <span>Partners & Sponsors</span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    partnersDropdownOpen ? 'rotate-180 text-[#008129]' : 'text-slate-600'
-                  }`}
-                />
-              </button>
-              {partnersDropdownOpen && (
-                <div className="pl-6 pr-2 py-1 space-y-1 bg-slate-50 border-l-2 border-[#008129]/30 ml-4 my-1">
-                  <a
-                    href="#partners"
-                    onClick={() => {
-                      setPartnersDropdownOpen(false);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="block px-3 py-2 text-sm font-semibold text-slate-800 hover:text-[#008129]"
-                  >
-                    Institutional Partners
-                  </a>
-                  <Link
-                    to="/contact"
-                    onClick={() => {
-                      setPartnersDropdownOpen(false);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="block px-3 py-2 text-sm font-semibold text-slate-800 hover:text-[#008129]"
-                  >
-                    Become a Sponsor / Exhibitor
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Partners & Sponsors */}
+            <Link
+              to="/partners"
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
+                location.pathname === '/partners' || location.pathname === '/sponsors'
+                  ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
+                  : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
+              }`}
+            >
+              <span>Partners &amp; Sponsors</span>
+            </Link>
 
             <Link
               to="/resources"
@@ -287,19 +284,19 @@ export const Navbar: React.FC = () => {
                   : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
               }`}
             >
-              <span>News</span>
+              <span>Resources</span>
             </Link>
 
             <Link
-              to="/about"
+              to="/contact"
               onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center justify-between px-4 py-3 rounded-none text-base font-bold transition-all ${
-                isActive('/about')
+                isActive('/contact')
                   ? 'text-[#008129] font-black bg-slate-50 border-l-4 border-[#008129]'
                   : 'text-slate-900 hover:text-[#008129] hover:bg-slate-50 border-l-4 border-transparent'
               }`}
             >
-              <span>About CIB Ghana</span>
+              <span>Contact</span>
             </Link>
 
             <div className="pt-4 border-t border-slate-200 space-y-2">

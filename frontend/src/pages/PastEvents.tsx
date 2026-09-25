@@ -63,9 +63,6 @@ export const PastEvents: React.FC = () => {
           className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
           <div className="text-left max-w-3xl space-y-2 sm:space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-white/90">
-              HISTORICAL ARCHIVE &amp; PROCEEDINGS
-            </span>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase">
               Past Events
             </h1>

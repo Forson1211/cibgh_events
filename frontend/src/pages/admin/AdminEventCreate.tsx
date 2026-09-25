@@ -72,7 +72,7 @@ export const AdminEventCreate: React.FC = () => {
     'Review & Publish',
   ];
 
-  const handleCreate = (status: EventStatus) => {
+  const handleCreate = async (status: EventStatus) => {
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -88,7 +88,7 @@ export const AdminEventCreate: React.FC = () => {
       description,
       short_description: shortDescription,
       category,
-      category_id: 'cat-custom',
+      category_id: 'c1111111-1111-1111-1111-111111111111',
       featured_image: featuredImage,
       start_date: startDate,
       end_date: endDate,
@@ -142,7 +142,7 @@ export const AdminEventCreate: React.FC = () => {
       gallery: [],
     };
 
-    addEvent(newEvent);
+    await addEvent(newEvent);
     navigate('/admin/events');
   };
 

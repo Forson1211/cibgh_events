@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="https://cibgh.org/wp-content/uploads/2024/01/cibg-logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>CIB Ghana Events Platform | Chartered Institute of Bankers, Ghana</title>
     <meta name="description" content="Discover, attend, and register for world-class conferences, training workshops, and executive summits by the Chartered Institute of Bankers, Ghana (CIB Ghana)." />
     <meta name="keywords" content="CIB Ghana, Chartered Institute of Bankers Ghana, Banking Conference, Ghana Banking Events, Ethics in Banking, Financial Training, Banking Week" />
@@ -33,6 +33,14 @@
   <body class="bg-white text-cib-charcoal-900 font-sans antialiased selection:bg-cib-green-100 selection:text-cib-green-900">
     <script>
       (function() {
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('beforeunload', function() {
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+        });
         function normalizeDpiScale() {
           try {
             var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);

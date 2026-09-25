@@ -59,21 +59,25 @@ export class PaymentController {
       const verification = await PaystackService.verifyPayment(reference);
 
       if (verification.data && verification.data.status === 'success') {
-        // Find registration by reference or update
-        // In local demo or live mode, locate the registration
-        const allEvents = await DataService.getAllEvents();
-        // Look up ticket
+        // Look up ticket and registration by reference
         const ticket = await DataService.getTicket(reference);
+        const registration = await DataService.getRegistrationByPaymentReference(reference);
 
-        // Update payment status
-        if (ticket) {
+        if (registration && ticket) {
+          await DataService.updatePaymentStatus(registration.id, 'SUCCESSFUL', reference);
+          EmailService.sendPaymentConfirmation({
+            registration,
+            ticket,
+            eventTitle: registration.event_title || ticket.event_title,
+          }).catch((e) => console.error('[PaymentController] Email dispatch notice:', e));
+        } else if (ticket) {
           await DataService.updatePaymentStatus(ticket.registration_id, 'SUCCESSFUL', reference);
           EmailService.sendTicketConfirmation(ticket).catch((e) => console.error(e));
         }
 
         return res.json({
           success: true,
-          message: 'Payment successfully verified',
+          message: 'Payment successfully verified and confirmation receipt issued',
           data: verification.data,
         });
       } else {
@@ -97,7 +101,15 @@ export class PaymentController {
       const reference = event.data?.reference;
       if (reference) {
         const ticket = await DataService.getTicket(reference);
-        if (ticket) {
+        const registration = await DataService.getRegistrationByPaymentReference(reference);
+        if (registration && ticket) {
+          await DataService.updatePaymentStatus(registration.id, 'SUCCESSFUL', reference);
+          EmailService.sendPaymentConfirmation({
+            registration,
+            ticket,
+            eventTitle: registration.event_title || ticket.event_title,
+          }).catch((e) => console.error('[Paystack Webhook] Email dispatch notice:', e));
+        } else if (ticket) {
           await DataService.updatePaymentStatus(ticket.registration_id, 'SUCCESSFUL', reference);
           EmailService.sendTicketConfirmation(ticket).catch((e) => console.error(e));
         }

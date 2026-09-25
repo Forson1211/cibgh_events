@@ -179,12 +179,29 @@ export const AdminCheckIn: React.FC = () => {
 
                 <div>
                   <span className="text-[11px] font-bold uppercase text-slate-400 block">
-                    CATEGORY:
+                    CATEGORY &amp; MEMBERSHIP:
                   </span>
-                  <strong className="text-base text-cib-green-800">
-                    {activeRegistration.registration_type_name}
-                  </strong>
-                  <p className="text-xs text-slate-500">Mode: {activeRegistration.attendance_type}</p>
+                  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                    <strong className="text-base text-cib-green-800">
+                      {activeRegistration.registration_type_name}
+                    </strong>
+                    {activeRegistration.membership_category && (
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
+                          activeRegistration.membership_category === 'ACIB'
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                            : activeRegistration.membership_category === 'FCIB'
+                            ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                            : activeRegistration.membership_category === 'Student'
+                            ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                            : 'bg-orange-100 text-orange-800 border border-orange-200'
+                        }`}
+                      >
+                        {activeRegistration.membership_category}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">Mode: {activeRegistration.attendance_type}</p>
                 </div>
 
                 <div>

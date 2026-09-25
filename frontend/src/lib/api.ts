@@ -50,7 +50,49 @@ export class ApiClient {
     return this.request(`/events/${encodeURIComponent(slugOrId)}`);
   }
 
+  static async createEvent(eventData: Partial<EventItem>): Promise<{ success: boolean; data: EventItem }> {
+    return this.request('/events', {
+      method: 'POST',
+      body: JSON.stringify(eventData),
+    });
+  }
+
+  static async updateEvent(id: string, updates: Partial<EventItem>): Promise<{ success: boolean; data: EventItem }> {
+    return this.request(`/events/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  }
+
+  static async deleteEvent(id: string): Promise<{ success: boolean; message: string }> {
+    return this.request(`/events/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  }
+
   // Registrations & Digital Passes
+  static async getRegistrations(params?: {
+    event_id?: string;
+    search?: string;
+    status?: string;
+    payment_status?: string;
+    membership_category?: string;
+  }): Promise<{
+    success: boolean;
+    count: number;
+    data: Registration[];
+  }> {
+    const query = new URLSearchParams();
+    if (params?.event_id) query.append('event_id', params.event_id);
+    if (params?.search) query.append('search', params.search);
+    if (params?.status) query.append('status', params.status);
+    if (params?.payment_status) query.append('payment_status', params.payment_status);
+    if (params?.membership_category) query.append('membership_category', params.membership_category);
+
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return this.request(`/registrations${qs}`);
+  }
+
   static async createRegistration(payload: CreateRegistrationRequest): Promise<{
     success: boolean;
     data: {
@@ -72,6 +114,16 @@ export class ApiClient {
     };
   }> {
     return this.request(`/registrations/${encodeURIComponent(identifier)}`);
+  }
+
+  static async resendConfirmationEmail(identifier: string): Promise<{
+    success: boolean;
+    message: string;
+    data?: any;
+  }> {
+    return this.request(`/registrations/${encodeURIComponent(identifier)}/resend-confirmation`, {
+      method: 'POST',
+    });
   }
 
   static async getTicket(identifier: string): Promise<{ success: boolean; data: DigitalTicket }> {

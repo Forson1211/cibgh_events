@@ -18,7 +18,8 @@ import {
   X,
   Shield,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 import { CIB_LOGO_URL } from '../../data/mockData';
 import { useApp } from '../../context/AppContext';
@@ -39,7 +40,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser } = useApp();
+  const { currentUser, adminLogout } = useApp();
+
+  const handleLogout = () => {
+    adminLogout();
+    navigate('/admin/login');
+  };
 
   const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
@@ -58,7 +64,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="h-screen bg-slate-50 flex overflow-hidden">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
@@ -69,25 +75,25 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-cib-charcoal-950 text-white flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 sm:w-72 h-screen bg-[#1B7E3E] text-white flex flex-col transition-transform duration-200 border-r border-[#166E36] shadow-2xl lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Sidebar Brand Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="bg-white p-1 rounded-lg">
+        <div className="p-5 border-b border-[#166E36] flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="bg-white p-1.5 shadow-sm">
               <img
                 src={CIB_LOGO_URL}
                 alt="CIB Ghana Logo"
-                className="h-8 w-auto object-contain"
+                className="h-9 w-auto object-contain"
               />
             </div>
             <div>
-              <h2 className="text-sm font-extrabold text-white font-display tracking-tight leading-none">
+              <h2 className="text-base font-black text-white font-display tracking-tight leading-none">
                 CIB GHANA
               </h2>
-              <span className="text-[10px] font-bold text-cib-gold-400 uppercase tracking-wider">
+              <span className="text-xs font-bold text-cib-gold-300 uppercase tracking-wider block mt-0.5">
                 Admin Center
               </span>
             </div>
@@ -95,29 +101,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-1 rounded-lg text-slate-400 hover:text-white lg:hidden"
+            className="p-1.5 text-emerald-100 hover:text-white hover:bg-white/10 lg:hidden"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* User Role Card */}
-        <div className="px-4 py-3 bg-white/5 border-b border-slate-800/80 mx-3 my-3 rounded-xl flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-cib-green-700 flex items-center justify-center font-bold text-xs text-white">
-            {currentUser.first_name[0]}
-          </div>
-          <div className="truncate flex-1">
-            <p className="text-xs font-bold text-white truncate">
-              {currentUser.first_name} {currentUser.last_name}
-            </p>
-            <span className="text-[10px] text-cib-gold-400 font-semibold uppercase">
-              {currentUser.role}
-            </span>
-          </div>
-        </div>
-
         {/* Navigation Links */}
-        <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-0 py-2 space-y-0">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -126,63 +117,96 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 key={item.href}
                 to={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                className={`flex items-center gap-3.5 px-5 py-3.5 text-sm font-bold transition-all ${
                   active
-                    ? 'bg-cib-green-700 text-white shadow-sm font-bold'
-                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                    ? 'bg-white text-[#1B7E3E] font-black border-l-4 border-[#1B7E3E]'
+                    : 'text-emerald-50 hover:bg-white/15 hover:text-white border-l-4 border-transparent'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-white' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
+                <Icon className={`w-5 h-5 ${active ? 'text-[#1B7E3E]' : 'text-emerald-200'}`} />
+                <span className="tracking-tight">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
+        {/* Admin Session & Logout */}
+        <div className="border-t border-[#006F23] p-3 space-y-1 bg-[#006822]">
+          <div className="flex items-center justify-between px-2 py-1 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+              <span className="font-bold text-white text-[11px] truncate max-w-[120px]">
+                Admin Active
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-[11px] font-bold text-emerald-200 hover:text-white flex items-center gap-1 transition-colors px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              title="Sign out of Admin Center"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+
         {/* Bottom Return to Public Site */}
-        <div className="p-3 border-t border-slate-800">
+        <div className="border-t border-[#005a1d]">
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-3.5 px-5 bg-black/20 hover:bg-black/30 text-white text-xs sm:text-sm font-bold transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-4 h-4" />
             <span>Return to Public Site</span>
           </Link>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 bg-slate-50/80 overflow-y-auto">
         {/* Admin Topbar */}
-        <header className="bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 sm:px-8 py-4">
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-6 sm:px-10 py-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 lg:hidden"
+                className="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 lg:hidden"
                 aria-label="Open Sidebar"
               >
-                <Menu className="w-5 h-5" />
+                <Menu className="w-6 h-6" />
               </button>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-black text-cib-charcoal-900 font-display tracking-tight">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
-                )}
-              </div>
+              {title && (
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-display tracking-tight">
+                    {title}
+                  </h1>
+                  {subtitle && (
+                    <p className="text-sm sm:text-base text-slate-500 mt-0.5">{subtitle}</p>
+                  )}
+                </div>
+              )}
             </div>
 
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
+            <div className="flex items-center gap-3">
+              {actions}
+              <button
+                onClick={handleLogout}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 text-xs font-bold transition-colors border-0 cursor-pointer"
+                title="Logout of Admin Center"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </header>
 
-        {/* Content Body */}
-        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
+        {/* Content Body (Full screen fitting without tiny max-w-7xl) */}
+        <main className="flex-1 p-6 sm:p-10 w-full">
           {children}
         </main>
       </div>
     </div>
   );
 };
+

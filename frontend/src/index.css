@@ -15,6 +15,22 @@
     scroll-behavior: smooth;
   }
 
+  /* Prevent mobile browsers (iOS Safari, Android Chrome) from auto-zooming into inputs when focused */
+  @media screen and (max-width: 768px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    touch-action: manipulation;
+  }
+
   body {
     @apply bg-white text-cib-charcoal antialiased overflow-x-hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";

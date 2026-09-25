@@ -12,6 +12,24 @@ dist
 dist-ssr
 *.tsbuildinfo
 *.local
+scratch/
+backend/scratch/
+
+# Python & Virtual Environments
+.venv
+.venv/
+venv
+venv/
+env
+env/
+ENV
+ENV/
+*.venv
+env.bak/
+venv.bak/
+__pycache__/
+*.py[cod]
+*$py.class
 
 # Editor directories and files
 .vscode/*

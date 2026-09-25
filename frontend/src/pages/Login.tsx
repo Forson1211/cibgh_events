@@ -7,16 +7,24 @@ import { Button } from '../components/ui/Button';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { setCurrentUser } = useApp();
+  const { setCurrentUser, adminLogin } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleManualLogin = (e: React.FormEvent) => {
+  const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password.trim() === 'cibghana') {
+      await adminLogin('cibghana');
+      navigate('/admin/dashboard');
+      return;
+    }
     const matched = DEMO_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
     if (matched) {
+      if (matched.role === 'SUPER_ADMIN') {
+        await adminLogin('cibghana');
+      }
       setCurrentUser(matched);
-      navigate(matched.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/dashboard');
+      navigate(matched.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/my-portal');
     } else {
       // Default to attendee
       setCurrentUser({
@@ -27,16 +35,17 @@ export const Login: React.FC = () => {
         role: 'ATTENDEE',
         created_at: new Date().toISOString(),
       });
-      navigate('/dashboard');
+      navigate('/my-portal');
     }
   };
 
-  const handleQuickLogin = (user: typeof DEMO_USERS[0]) => {
+  const handleQuickLogin = async (user: typeof DEMO_USERS[0]) => {
     setCurrentUser(user);
     if (user.role === 'SUPER_ADMIN') {
+      await adminLogin('cibghana');
       navigate('/admin/dashboard');
     } else {
-      navigate('/dashboard');
+      navigate('/my-portal');
     }
   };
 
@@ -99,7 +108,7 @@ export const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@cibgh.org"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-cib-green-600 focus:outline-none"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm focus:border-cib-green-600 focus:outline-none"
               />
             </div>
           </div>
@@ -116,7 +125,7 @@ export const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-cib-green-600 focus:outline-none"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm focus:border-cib-green-600 focus:outline-none"
               />
             </div>
           </div>

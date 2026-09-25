@@ -136,7 +136,7 @@ export const ChatbotWidget: React.FC = () => {
         text: "The 30th National Banking & Ethics Conference awards **16 Accredited CPD Hours** under the Chartered Institute of Bankers, Ghana Act 991.\n\nAttendance is tracked electronically via your digital QR ticket, and certified digital CPD certificates are issued directly to your delegate dashboard upon conference conclusion.",
         time: getCurrentTime(),
         actionLinks: [
-          { label: 'About Chartered Mandate', url: '/about' },
+          { label: 'Secretariat Contact', url: '/contact' },
         ],
       };
     }

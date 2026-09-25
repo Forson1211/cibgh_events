@@ -35,9 +35,6 @@ export const Dashboard: React.FC = () => {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="text-left space-y-2 sm:space-y-3">
-              <span className="text-xs font-black uppercase tracking-widest text-white/90">
-                DELEGATE &amp; MEMBER PORTAL
-              </span>
               <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase">
                 Welcome, {currentUser.first_name} {currentUser.last_name}
               </h1>

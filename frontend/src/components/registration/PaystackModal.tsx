@@ -153,7 +153,7 @@ export const PaystackModal: React.FC<PaystackModalProps> = ({
                   value={momoPhone}
                   onChange={(e) => setMomoPhone(e.target.value)}
                   placeholder="e.g. 0244123456"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-cib-green-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm focus:border-cib-green-600 focus:outline-none"
                 />
               </div>
 
@@ -176,7 +176,7 @@ export const PaystackModal: React.FC<PaystackModalProps> = ({
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
                   placeholder="4084 0012 3456 7890"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-cib-green-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm font-mono focus:border-cib-green-600 focus:outline-none"
                 />
               </div>
 
@@ -191,7 +191,7 @@ export const PaystackModal: React.FC<PaystackModalProps> = ({
                     value={cardExpiry}
                     onChange={(e) => setCardExpiry(e.target.value)}
                     placeholder="MM/YY"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-cib-green-600 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm font-mono focus:border-cib-green-600 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -205,7 +205,7 @@ export const PaystackModal: React.FC<PaystackModalProps> = ({
                     value={cardCvv}
                     onChange={(e) => setCardCvv(e.target.value)}
                     placeholder="123"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-cib-green-600 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-base sm:text-sm font-mono focus:border-cib-green-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -213,15 +213,13 @@ export const PaystackModal: React.FC<PaystackModalProps> = ({
           )}
 
           <div className="pt-2">
-            <Button
+            <button
               type="submit"
-              variant="primary"
-              size="lg"
-              className="w-full bg-emerald-700 hover:bg-emerald-800"
-              isLoading={isProcessing}
+              disabled={isProcessing}
+              className="w-full py-3.5 rounded-none font-bold text-sm sm:text-base transition-all shadow-md bg-[#1B7E3E] hover:bg-[#166632] text-white active:scale-95 cursor-pointer disabled:opacity-50"
             >
               Pay {currency} {amount.toFixed(2)}
-            </Button>
+            </button>
           </div>
 
           <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 font-medium">

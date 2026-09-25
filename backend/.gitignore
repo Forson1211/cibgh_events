@@ -1,0 +1,12 @@
+# Backend gitignore
+node_modules
+dist
+logs
+*.log
+.env
+.env.*
+!.env.example
+.venv
+venv
+env
+*.tsbuildinfo

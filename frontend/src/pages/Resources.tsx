@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useApp } from '../context/AppContext';
-import { FileDown, Search, Filter, BookOpen, FileText, CheckCircle2 } from 'lucide-react';
+import { FileDown, Search, Filter, BookOpen, FileText, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 
@@ -72,9 +72,6 @@ export const Resources: React.FC = () => {
           className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
           <div className="text-left max-w-3xl space-y-2 sm:space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-white/90">
-              PUBLICATIONS &amp; KNOWLEDGE ARTIFACTS
-            </span>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase">
               News &amp; Resources
             </h1>
@@ -101,7 +98,7 @@ export const Resources: React.FC = () => {
               placeholder="Search document title or event..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:border-cib-green-600 focus:outline-none bg-white"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-base sm:text-xs focus:border-cib-green-600 focus:outline-none bg-white"
             />
           </div>
 
@@ -122,63 +119,105 @@ export const Resources: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Resources Table/Card Grid */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          {filteredResources.map((res) => (
-            <motion.div
-              key={res.id}
-              variants={cardVariant}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className="bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:border-cib-green-300 hover:shadow-xl transition-all flex flex-col justify-between space-y-4"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <Badge variant="green" size="sm">
-                    {res.category}
-                  </Badge>
-                  <span className="text-[11px] font-mono text-slate-400">
-                    {res.file_type} &bull; {res.file_size}
-                  </span>
+        {/* Resources Table/Card Grid or Empty State */}
+        {filteredResources.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="py-16 sm:py-20 px-6 text-center bg-slate-50/70 border border-slate-200/80 rounded-2xl max-w-xl mx-auto space-y-4 shadow-sm"
+          >
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-[#1B7E3E] flex items-center justify-center mx-auto shadow-xs">
+              <FileText className="w-8 h-8 stroke-[1.8]" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-800 font-display">
+                {allResources.length === 0
+                  ? 'No Resources Available Yet'
+                  : 'No Matching Resources Found'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                {allResources.length === 0
+                  ? 'Conference brochures, keynote slides, and official documents will be published here as soon as they become available.'
+                  : 'We couldn’t find any documents matching your current search query or category filter.'}
+              </p>
+            </div>
+
+            {(searchQuery || selectedCategory !== 'ALL') && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('ALL');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-xs"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset Filters</span>
+                </button>
+              </div>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {filteredResources.map((res) => (
+              <motion.div
+                key={res.id}
+                variants={cardVariant}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:border-cib-green-300 hover:shadow-xl transition-all flex flex-col justify-between space-y-4"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Badge variant="green" size="sm">
+                      {res.category}
+                    </Badge>
+                    <span className="text-[11px] font-mono text-slate-400">
+                      {res.file_type} &bull; {res.file_size}
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-cib-charcoal-900 font-display">
+                    {res.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {res.description}
+                  </p>
+
+                  <p className="text-[11px] text-cib-green-700 font-semibold pt-1">
+                    Associated Event: {res.eventTitle}
+                  </p>
                 </div>
 
-                <h3 className="text-lg font-bold text-cib-charcoal-900 font-display">
-                  {res.title}
-                </h3>
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    Verified CIB Release
+                  </span>
 
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  {res.description}
-                </p>
-
-                <p className="text-[11px] text-cib-green-700 font-semibold pt-1">
-                  Associated Event: {res.eventTitle}
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  Verified CIB Release
-                </span>
-
-                <a
-                  href={res.file_url}
-                  download
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cib-green-50 text-cib-green-800 hover:bg-cib-green-100 text-xs font-bold transition-colors"
-                >
-                  <FileDown className="w-4 h-4" />
-                  <span>Download Document</span>
-                </a>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                  <a
+                    href={res.file_url}
+                    download
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cib-green-50 text-cib-green-800 hover:bg-cib-green-100 text-xs font-bold transition-colors"
+                  >
+                    <FileDown className="w-4 h-4" />
+                    <span>Download Document</span>
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </div>
   );

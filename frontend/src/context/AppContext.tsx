@@ -18,13 +18,20 @@ interface AppContextType {
   getEventBySlug: (slug: string) => EventItem | undefined;
   getEventById: (id: string) => EventItem | undefined;
   getRegistrationByNumber: (regNumber: string) => Registration | undefined;
+  refreshRegistrations: () => Promise<void>;
+  refreshAll: () => Promise<void>;
+  isLiveSyncing: boolean;
+  lastSyncedAt: Date | null;
   addRegistration: (reg: Omit<Registration, 'id' | 'registration_number' | 'created_at'>) => Registration;
   checkInAttendee: (regNumber: string) => { success: boolean; message: string; registration?: Registration };
-  addEvent: (event: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>) => EventItem;
-  updateEvent: (id: string, updates: Partial<EventItem>) => void;
-  deleteEvent: (id: string) => void;
-  toggleEventPublish: (id: string) => void;
-  toggleEventFeatured: (id: string) => void;
+  addEvent: (event: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>) => Promise<EventItem> | EventItem;
+  updateEvent: (id: string, updates: Partial<EventItem>) => Promise<void> | void;
+  deleteEvent: (id: string) => Promise<boolean> | void;
+  toggleEventPublish: (id: string) => Promise<void> | void;
+  toggleEventFeatured: (id: string) => Promise<void> | void;
+  isAdminAuthenticated: boolean;
+  adminLogin: (password: string) => Promise<boolean>;
+  adminLogout: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -34,8 +41,30 @@ const STORAGE_KEY_REGS = 'cib_ghana_registrations_v1';
 const STORAGE_KEY_USER = 'cib_ghana_current_user_v1';
 const STORAGE_KEY_REG_EMAIL = 'cib_ghana_registered_email_v1';
 const STORAGE_KEY_REG_NAME = 'cib_ghana_registered_name_v1';
+const STORAGE_KEY_ADMIN_AUTH = 'cib_admin_auth_v1';
+
+export const normalizeRegistration = (r: Registration): Registration => {
+  let cat = r.membership_category;
+  if (!cat || !['ACIB', 'FCIB', 'Student', 'Non-Member'].includes(cat)) {
+    const memId = (r.cib_member_id || '').toUpperCase();
+    const typeName = (r.registration_type_name || '').toLowerCase();
+    if (memId.startsWith('FCIB') || typeName.includes('fellow')) {
+      cat = 'FCIB';
+    } else if (memId.startsWith('ACIB') || typeName.includes('associate') || typeName.includes('chartered')) {
+      cat = 'ACIB';
+    } else if (memId.startsWith('STU') || typeName.includes('student')) {
+      cat = 'Student';
+    } else {
+      cat = 'Non-Member';
+    }
+  }
+  return { ...r, membership_category: cat };
+};
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isLiveSyncing, setIsLiveSyncing] = useState(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(new Date());
+
   const [events, setEvents] = useState<EventItem[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY_EVENTS);
     if (saved) {
@@ -47,9 +76,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [registrations, setRegistrations] = useState<Registration[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY_REGS);
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { console.error(e); }
+      try {
+        const list = JSON.parse(saved);
+        if (Array.isArray(list)) return list.map(normalizeRegistration);
+      } catch (e) { console.error(e); }
     }
-    return MOCK_REGISTRATIONS;
+    return MOCK_REGISTRATIONS.map(normalizeRegistration);
   });
 
   const [speakers] = useState<Speaker[]>(MOCK_SPEAKERS);
@@ -80,6 +112,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return localStorage.getItem(STORAGE_KEY_REG_NAME) || null;
   });
 
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem(STORAGE_KEY_ADMIN_AUTH) === 'true';
+  });
+
+  const adminLogin = async (password: string): Promise<boolean> => {
+    const trimmed = password.trim();
+    if (trimmed === 'cibghana') {
+      setIsAdminAuthenticated(true);
+      localStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
+      setCurrentUser(DEMO_USERS[0]);
+      try {
+        await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: trimmed }),
+        });
+      } catch (err) {
+        // local fallback
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const adminLogout = () => {
+    setIsAdminAuthenticated(false);
+    localStorage.removeItem(STORAGE_KEY_ADMIN_AUTH);
+  };
+
   const setRegisteredUserName = (name: string | null) => {
     setRegisteredUserNameState(name);
     if (name) {
@@ -101,21 +162,79 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
   }, [currentUser]);
 
-  // Synchronize events from the backend engine when available
+  const refreshEvents = async () => {
+    try {
+      const res = await ApiClient.getEvents();
+      if (res.success && Array.isArray(res.data)) {
+        setEvents(res.data);
+      }
+    } catch (err) {
+      console.warn('Failed to refresh events:', err);
+    }
+  };
+
+  const refreshRegistrations = async () => {
+    setIsLiveSyncing(true);
+    try {
+      const res = await ApiClient.getRegistrations();
+      if (res.success && Array.isArray(res.data)) {
+        setRegistrations(res.data.map(normalizeRegistration));
+        setLastSyncedAt(new Date());
+      }
+    } catch {
+      // Backend temporarily offline; localStorage remains primary
+    } finally {
+      setIsLiveSyncing(false);
+    }
+  };
+
+  const refreshAll = async () => {
+    setIsLiveSyncing(true);
+    try {
+      await Promise.allSettled([refreshRegistrations(), refreshEvents()]);
+      setLastSyncedAt(new Date());
+    } finally {
+      setIsLiveSyncing(false);
+    }
+  };
+
+  // Cross-tab and real-time backend synchronization for admin and attendees
   useEffect(() => {
-    ApiClient.getEvents()
-      .then((res) => {
-        if (res.success && res.data && res.data.length > 0) {
-          setEvents((prev) => {
-            const backendIds = new Set(res.data.map((e) => e.id));
-            const localOnly = prev.filter((e) => !backendIds.has(e.id));
-            return [...res.data, ...localOnly];
-          });
-        }
-      })
-      .catch(() => {
-        // Backend not yet running or offline; local state remains active
-      });
+    refreshAll();
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY_REGS && e.newValue) {
+        try {
+          const list = JSON.parse(e.newValue);
+          if (Array.isArray(list)) {
+            setRegistrations(list.map(normalizeRegistration));
+          }
+        } catch {}
+      }
+    };
+
+    const handleCustom = (e: Event) => {
+      const customEvent = e as CustomEvent<Registration>;
+      if (customEvent.detail) {
+        const normalized = normalizeRegistration(customEvent.detail);
+        setRegistrations((prev) => {
+          if (prev.some((r) => r.registration_number === normalized.registration_number)) {
+            return prev;
+          }
+          return [normalized, ...prev];
+        });
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('cib_registration_created', handleCustom);
+    const interval = setInterval(refreshAll, 6000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('cib_registration_created', handleCustom);
+      clearInterval(interval);
+    };
   }, []);
 
   const getEventBySlug = (slug: string) => events.find((e) => e.slug === slug);
@@ -124,19 +243,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     registrations.find((r) => r.registration_number.toUpperCase() === regNumber.trim().toUpperCase());
 
   const addRegistration = (regData: Omit<Registration, 'id' | 'registration_number' | 'created_at'>): Registration => {
-    const newReg: Registration = {
+    const newReg: Registration = normalizeRegistration({
       ...regData,
       id: `reg-${Date.now()}`,
       registration_number: generateRegistrationNumber(),
       created_at: new Date().toISOString(),
-    };
+    });
 
     setRegistrations((prev) => [newReg, ...prev]);
 
-    // Dispatch registration asynchronously to backend API
+    // Store in localStorage immediately & notify other tabs
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_REGS);
+      const list = saved ? JSON.parse(saved) : [];
+      localStorage.setItem(STORAGE_KEY_REGS, JSON.stringify([newReg, ...list]));
+      window.dispatchEvent(new CustomEvent('cib_registration_created', { detail: newReg }));
+    } catch (e) {
+      console.warn('Storage sync error:', e);
+    }
+
+    // Dispatch registration asynchronously to backend API with full metadata
     ApiClient.createRegistration({
+      id: newReg.id,
+      registration_number: newReg.registration_number,
       event_id: regData.event_id,
+      event_title: regData.event_title,
       registration_type_id: regData.registration_type_id,
+      registration_type_name: regData.registration_type_name,
       first_name: regData.first_name,
       last_name: regData.last_name,
       email: regData.email,
@@ -145,9 +278,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       job_title: regData.job_title,
       country: regData.country,
       cib_member_id: regData.cib_member_id,
+      membership_category: regData.membership_category,
       attendance_type: regData.attendance_type,
       dietary_requirements: regData.dietary_requirements,
       special_assistance: regData.special_assistance,
+      total_amount: regData.total_amount,
+      currency: regData.currency,
+      payment_status: regData.payment_status,
+      payment_reference: regData.payment_reference,
+      payment_method: regData.payment_method,
+      check_in_status: regData.check_in_status,
+    }).then((res) => {
+      if (res.success && res.data?.registration) {
+        refreshRegistrations();
+      }
     }).catch((err) => {
       console.log('[AppContext] Backend registration sync notice:', err);
     });
@@ -209,7 +353,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   };
 
-  const addEvent = (eventData: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>): EventItem => {
+  const addEvent = async (eventData: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>): Promise<EventItem> => {
+    try {
+      const res = await ApiClient.createEvent(eventData);
+      if (res.success && res.data) {
+        setEvents((prev) => [res.data, ...prev.filter((e) => e.id !== res.data.id)]);
+        return res.data;
+      }
+    } catch (err) {
+      console.warn('Backend event creation warning:', err);
+    }
     const newEvent: EventItem = {
       ...eventData,
       id: `evt-${Date.now()}`,
@@ -220,32 +373,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newEvent;
   };
 
-  const updateEvent = (id: string, updates: Partial<EventItem>) => {
+  const updateEvent = async (id: string, updates: Partial<EventItem>) => {
     setEvents((prev) =>
       prev.map((e) => (e.id === id ? { ...e, ...updates, updated_at: new Date().toISOString() } : e))
     );
+    try {
+      await ApiClient.updateEvent(id, updates);
+    } catch (err) {
+      console.warn('Backend update event failed:', err);
+    }
   };
 
-  const deleteEvent = (id: string) => {
+  const deleteEvent = async (id: string): Promise<boolean> => {
+    // 1. Optimistically remove from events and registrations state
     setEvents((prev) => prev.filter((e) => e.id !== id));
+    setRegistrations((prev) => prev.filter((r) => r.event_id !== id));
+
+    // 2. Call backend to delete from Supabase and database
+    try {
+      await ApiClient.deleteEvent(id);
+      await refreshEvents();
+      return true;
+    } catch (err) {
+      console.error('Backend deleteEvent error:', err);
+      await refreshEvents();
+      return false;
+    }
   };
 
-  const toggleEventPublish = (id: string) => {
-    setEvents((prev) =>
-      prev.map((e) => {
-        if (e.id === id) {
-          const nextStatus = e.status === 'DRAFT' ? 'OPEN_FOR_REGISTRATION' : 'DRAFT';
-          return { ...e, status: nextStatus, updated_at: new Date().toISOString() };
-        }
-        return e;
-      })
-    );
+  const toggleEventPublish = async (id: string) => {
+    const ev = events.find((e) => e.id === id);
+    if (!ev) return;
+    const nextStatus = ev.status === 'DRAFT' ? 'OPEN_FOR_REGISTRATION' : 'DRAFT';
+    await updateEvent(id, { status: nextStatus });
   };
 
-  const toggleEventFeatured = (id: string) => {
-    setEvents((prev) =>
-      prev.map((e) => (e.id === id ? { ...e, is_featured: !e.is_featured, updated_at: new Date().toISOString() } : e))
-    );
+  const toggleEventFeatured = async (id: string) => {
+    const ev = events.find((e) => e.id === id);
+    if (!ev) return;
+    await updateEvent(id, { is_featured: !ev.is_featured });
   };
 
   return (
@@ -264,6 +430,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         getEventBySlug,
         getEventById,
         getRegistrationByNumber,
+        refreshRegistrations,
+        refreshAll,
+        isLiveSyncing,
+        lastSyncedAt,
         addRegistration,
         checkInAttendee,
         addEvent,
@@ -271,6 +441,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteEvent,
         toggleEventPublish,
         toggleEventFeatured,
+        isAdminAuthenticated,
+        adminLogin,
+        adminLogout,
       }}
     >
       {children}

@@ -23,9 +23,19 @@ export const config = {
     publicKey: process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_demo_paystack_public_key',
   },
 
-  // Resend Email
+  // Email Service (Resend or SMTP via Nodemailer)
   email: {
     apiKey: process.env.RESEND_API_KEY || '',
-    fromEmail: process.env.FROM_EMAIL || 'events@cibghana.org',
+    fromEmail: process.env.FROM_EMAIL || 'CIB Ghana <cibghevent@resend.dev>',
+    replyTo: process.env.REPLY_TO_EMAIL || 'cibghevent@cibghana.org',
+    smtp: {
+      host: process.env.SMTP_HOST || '',
+      port: parseInt(process.env.SMTP_PORT || '587', 10),
+      secure: process.env.SMTP_SECURE === 'true',
+      user: process.env.SMTP_USER || '',
+      pass: process.env.SMTP_PASS || '',
+      from: process.env.SMTP_FROM || 'CIB Ghana <cibghevent@cibghana.org>',
+    },
   },
 };
+

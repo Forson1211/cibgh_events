@@ -21,6 +21,12 @@ export const Footer: React.FC = () => {
     }
   };
 
+  const handleLinkClick = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    document.body.scrollTop = 0;
+  };
+
   return (
     <footer className="bg-[#064225] text-white relative z-20">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +48,7 @@ export const Footer: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className="w-full sm:w-80 px-4 py-3.5 bg-white text-slate-900 placeholder:text-slate-400 rounded-none text-sm outline-none focus:ring-2 focus:ring-[#F5A623]"
+              className="w-full sm:w-80 px-4 py-3.5 bg-white text-slate-900 placeholder:text-slate-400 rounded-none text-base sm:text-sm outline-none focus:ring-2 focus:ring-[#F5A623]"
             />
             <button
               type="submit"
@@ -56,7 +62,22 @@ export const Footer: React.FC = () => {
         {/* ROW 2: LOGO & SOCIAL MEDIA (Matching reference) */}
         <div className="flex items-center justify-between gap-4 py-6 sm:py-8 border-b border-white/20">
           {/* Organization Brand Logo */}
-          <Link to="/" className="inline-block group focus:outline-none shrink-0">
+          <Link
+            to="/"
+            onClick={(e) => {
+              if (window.location.pathname === '/') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                document.body.scrollTop = 0;
+              } else {
+                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+              }
+            }}
+            className="inline-block group focus:outline-none shrink-0 cursor-pointer"
+          >
             <img
               src="/cib-logo-white.png"
               alt="Chartered Institute of Bankers, Ghana"
@@ -151,11 +172,9 @@ export const Footer: React.FC = () => {
             </button>
             {openSection === 'events' && (
               <ul className="pb-4 space-y-2.5 text-white/85 text-sm pl-1 animate-in fade-in-50 duration-150">
-                <li><Link to="/events" className="hover:text-white transition-colors block py-0.5">Upcoming Events</Link></li>
-                <li><Link to="/events/annual-banking-ethics-conference-2026" className="hover:text-white transition-colors block py-0.5">Annual Ethics Conference</Link></li>
-                <li><Link to="/past-events" className="hover:text-white transition-colors block py-0.5">Past Events Archive</Link></li>
-                <li><Link to="/events" className="hover:text-white transition-colors block py-0.5">Conference Calendar</Link></li>
-                <li><Link to="/past-events" className="hover:text-white transition-colors block py-0.5">Photo Highlights &amp; Media</Link></li>
+                <li><Link to="/events" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Upcoming Events</Link></li>
+                <li><Link to="/events/30th-national-banking-ethics-conference-2026" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Annual Ethics Conference</Link></li>
+                <li><Link to="/events" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Conference Calendar</Link></li>
               </ul>
             )}
           </div>
@@ -176,11 +195,11 @@ export const Footer: React.FC = () => {
             </button>
             {openSection === 'delegates' && (
               <ul className="pb-4 space-y-2.5 text-white/85 text-sm pl-1 animate-in fade-in-50 duration-150">
-                <li><Link to="/events" className="hover:text-white transition-colors block py-0.5">Register for an Event</Link></li>
-                <li><Link to="/dashboard" className="hover:text-white transition-colors block py-0.5">Delegate Portal</Link></li>
-                <li><Link to="/dashboard" className="hover:text-white transition-colors block py-0.5">Digital Tickets &amp; QR</Link></li>
-                <li><Link to="/dashboard" className="hover:text-white transition-colors block py-0.5">CPD Certificates</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Group &amp; Corporate Booking</Link></li>
+                <li><Link to="/events/30th-national-banking-ethics-conference-2026/register" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Register for an Event</Link></li>
+                <li><Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Delegate Portal</Link></li>
+                <li><Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Digital Tickets &amp; QR</Link></li>
+                <li><Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">CPD Certificates</Link></li>
+                <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Group &amp; Corporate Booking</Link></li>
               </ul>
             )}
           </div>
@@ -201,11 +220,11 @@ export const Footer: React.FC = () => {
             </button>
             {openSection === 'programme' && (
               <ul className="pb-4 space-y-2.5 text-white/85 text-sm pl-1 animate-in fade-in-50 duration-150">
-                <li><Link to="/speakers" className="hover:text-white transition-colors block py-0.5">Keynote Speakers</Link></li>
-                <li><Link to="/events" className="hover:text-white transition-colors block py-0.5">Agendas &amp; Schedules</Link></li>
-                <li><Link to="/resources" className="hover:text-white transition-colors block py-0.5">Conference Resources</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors block py-0.5">Sponsors &amp; Partners</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Exhibitor Inquiries</Link></li>
+                <li><Link to="/speakers" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Keynote Speakers</Link></li>
+                <li><Link to="/events/30th-national-banking-ethics-conference-2026#agenda" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Agendas &amp; Schedules</Link></li>
+                <li><Link to="/resources" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Conference Resources</Link></li>
+                <li><Link to="/partners" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Sponsors &amp; Partners</Link></li>
+                <li><Link to="/sponsors" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Exhibitor Inquiries</Link></li>
               </ul>
             )}
           </div>
@@ -226,11 +245,10 @@ export const Footer: React.FC = () => {
             </button>
             {openSection === 'support' && (
               <ul className="pb-4 space-y-2.5 text-white/85 text-sm pl-1 animate-in fade-in-50 duration-150">
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Event Help &amp; FAQs</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Payment Assistance</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Venue &amp; Logistics</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors block py-0.5">Terms &amp; Cancellation</Link></li>
-                <li><Link to="/login" className="hover:text-white transition-colors block py-0.5">Admin Sign In</Link></li>
+                <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Event Help &amp; FAQs</Link></li>
+                <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Payment Assistance</Link></li>
+                <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Venue &amp; Logistics</Link></li>
+                <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors block py-0.5">Terms &amp; Cancellation</Link></li>
               </ul>
             )}
           </div>
@@ -287,28 +305,18 @@ export const Footer: React.FC = () => {
             <div className="h-[1px] bg-white/20 w-full my-3" />
             <ul className="space-y-2.5 text-white/85">
               <li>
-                <Link to="/events" className="hover:text-white transition-colors">
+                <Link to="/events" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Upcoming Events
                 </Link>
               </li>
               <li>
-                <Link to="/events/annual-banking-ethics-conference-2026" className="hover:text-white transition-colors">
+                <Link to="/events/30th-national-banking-ethics-conference-2026" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Annual Ethics Conference
                 </Link>
               </li>
               <li>
-                <Link to="/past-events" className="hover:text-white transition-colors">
-                  Past Events Archive
-                </Link>
-              </li>
-              <li>
-                <Link to="/events" className="hover:text-white transition-colors">
+                <Link to="/events" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Conference Calendar
-                </Link>
-              </li>
-              <li>
-                <Link to="/past-events" className="hover:text-white transition-colors">
-                  Photo Highlights &amp; Media
                 </Link>
               </li>
             </ul>
@@ -320,27 +328,27 @@ export const Footer: React.FC = () => {
             <div className="h-[1px] bg-white/20 w-full my-3" />
             <ul className="space-y-2.5 text-white/85">
               <li>
-                <Link to="/events" className="hover:text-white transition-colors">
+                <Link to="/events/30th-national-banking-ethics-conference-2026/register" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Register for an Event
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-white transition-colors">
+                <Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Delegate Portal
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-white transition-colors">
+                <Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Digital Tickets &amp; QR
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-white transition-colors">
+                <Link to="/my-portal" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   CPD Certificates
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Group &amp; Corporate Booking
                 </Link>
               </li>
@@ -353,27 +361,27 @@ export const Footer: React.FC = () => {
             <div className="h-[1px] bg-white/20 w-full my-3" />
             <ul className="space-y-2.5 text-white/85">
               <li>
-                <Link to="/speakers" className="hover:text-white transition-colors">
+                <Link to="/speakers" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Keynote Speakers
                 </Link>
               </li>
               <li>
-                <Link to="/events" className="hover:text-white transition-colors">
+                <Link to="/events/30th-national-banking-ethics-conference-2026#agenda" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Agendas &amp; Schedules
                 </Link>
               </li>
               <li>
-                <Link to="/resources" className="hover:text-white transition-colors">
+                <Link to="/resources" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Conference Resources
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-white transition-colors">
+                <Link to="/partners" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Sponsors &amp; Partners
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/sponsors" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Exhibitor Inquiries
                 </Link>
               </li>
@@ -386,28 +394,23 @@ export const Footer: React.FC = () => {
             <div className="h-[1px] bg-white/20 w-full my-3" />
             <ul className="space-y-2.5 text-white/85">
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Event Help &amp; FAQs
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Payment Assistance
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Venue &amp; Logistics
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link to="/contact" onClick={handleLinkClick} className="hover:text-white transition-colors">
                   Terms &amp; Cancellation
-                </Link>
-              </li>
-              <li>
-                <Link to="/login" className="hover:text-white transition-colors">
-                  Admin Sign In
                 </Link>
               </li>
             </ul>

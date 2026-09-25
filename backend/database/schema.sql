@@ -6,13 +6,13 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 1. ENUMS
-CREATE TYPE user_role AS ENUM ('SUPER_ADMIN', 'EVENT_ADMIN', 'STAFF', 'ATTENDEE');
-CREATE TYPE event_status AS ENUM ('DRAFT', 'UPCOMING', 'OPEN_FOR_REGISTRATION', 'REGISTRATION_CLOSED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');
-CREATE TYPE attendance_type AS ENUM ('PHYSICAL', 'VIRTUAL', 'HYBRID');
-CREATE TYPE payment_status AS ENUM ('PENDING', 'PROCESSING', 'SUCCESSFUL', 'FAILED', 'REFUNDED');
-CREATE TYPE check_in_status AS ENUM ('REGISTERED', 'CHECKED_IN', 'CANCELLED');
-CREATE TYPE sponsor_tier AS ENUM ('PLATINUM', 'GOLD', 'SILVER', 'PARTNER', 'ACADEMIC');
+-- 1. ENUMS (idempotent — skips if already exists)
+DO $$ BEGIN CREATE TYPE user_role AS ENUM ('SUPER_ADMIN', 'EVENT_ADMIN', 'STAFF', 'ATTENDEE'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE event_status AS ENUM ('DRAFT', 'UPCOMING', 'OPEN_FOR_REGISTRATION', 'REGISTRATION_CLOSED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE attendance_type AS ENUM ('PHYSICAL', 'VIRTUAL', 'HYBRID'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE payment_status AS ENUM ('PENDING', 'PROCESSING', 'SUCCESSFUL', 'FAILED', 'REFUNDED'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE check_in_status AS ENUM ('REGISTERED', 'CHECKED_IN', 'CANCELLED'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE sponsor_tier AS ENUM ('PLATINUM', 'GOLD', 'SILVER', 'PARTNER', 'ACADEMIC'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- 2. PROFILES
 CREATE TABLE IF NOT EXISTS public.profiles (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS public.events (
   description TEXT NOT NULL,
   short_description TEXT NOT NULL,
   category_id UUID REFERENCES public.event_categories(id) ON DELETE SET NULL,
-  featured_image TEXT NOT NULL,
+  featured_image TEXT DEFAULT NULL,
   banner_image TEXT,
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS public.speakers (
   position TEXT NOT NULL,
   organization TEXT NOT NULL,
   country TEXT NOT NULL DEFAULT 'Ghana',
-  photo_url TEXT NOT NULL,
+  photo_url TEXT DEFAULT NULL,
   biography TEXT NOT NULL,
   expertise TEXT[] DEFAULT '{}',
   is_keynote BOOLEAN DEFAULT FALSE,
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS public.agenda_sessions (
 CREATE TABLE IF NOT EXISTS public.sponsors (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
-  logo_url TEXT NOT NULL,
+  logo_url TEXT DEFAULT NULL,
   website_url TEXT,
   tier sponsor_tier DEFAULT 'PARTNER',
   description TEXT,

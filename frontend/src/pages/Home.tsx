@@ -429,17 +429,14 @@ export const Home: React.FC = () => {
               ABOUT THE CONFERENCE
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-cib-charcoal-900 font-display tracking-tight leading-tight text-left">
-              Thirty years of shaping the banking profession
+              Sixty years of shaping the banking profession
             </h2>
             <div className="space-y-4 text-slate-800 text-justify text-sm sm:text-base leading-relaxed sm:leading-7 pt-2">
               <p className="text-justify">
-                For three decades, the National Banking &amp; Ethics Conference has brought together regulators, bank executives, and professionals shaping Ghana's financial sector. This year's edition arrives at a pivotal moment for the industry.
+                For six decades, the National Banking &amp; Ethics Conference has brought together regulators, bank executives, and industry leaders shaping Ghana's financial sector.
               </p>
               <p className="text-justify">
-                Artificial intelligence is reshaping fraud detection and customer experience. Stablecoins and virtual assets are testing regulatory frameworks. And through it all, the profession's ethical foundations matter more than ever. <strong className="font-black text-slate-950">Trust, Technology and Transformation</strong> is a conversation about how banking professionals navigate all three, together.
-              </p>
-              <p className="text-justify">
-                For the two days in Ada, delegates move between masterclasses, mentorship, boardroom-level keynotes, and honest conversation with the Volta River and the Atlantic as a backdrop.
+                As artificial intelligence and digital assets redefine banking, <strong className="font-black text-slate-950">Trust, Technology and Transformation</strong> convenes professionals in Ada for boardroom-level keynotes, masterclasses, and strategic dialogue on the future of ethical finance.
               </p>
             </div>
           </div>
@@ -511,31 +508,35 @@ export const Home: React.FC = () => {
             {[
               {
                 title: 'CONNECT',
-                description: 'Meet banking and financial professionals across commercial banks, regulators, fintechs, and development institutions.',
+                subtitle: 'Network & Partnerships',
                 icon: Users,
                 color: 'text-[#008129]',
                 bg: 'bg-emerald-50',
+                border: 'hover:border-[#008129]/40',
               },
               {
                 title: 'LEARN',
-                description: 'Gain practical industry knowledge, masterclasses on credit modelling, ESG investing, and AI-driven compliance.',
+                subtitle: 'Knowledge & Masterclasses',
                 icon: BookOpen,
                 color: 'text-amber-600',
                 bg: 'bg-amber-50',
+                border: 'hover:border-amber-500/40',
               },
               {
                 title: 'LEAD',
-                description: 'Engage with industry leaders and decision-makers shaping monetary policy, banking supervision, and corporate governance.',
+                subtitle: 'Policy & Governance',
                 icon: Shield,
                 color: 'text-[#F20300]',
                 bg: 'bg-rose-50',
+                border: 'hover:border-[#F20300]/40',
               },
               {
                 title: 'GROW',
-                description: 'Build strategic relationships, earn mandatory CIB CPD credits, and advance your professional standing within the Institute.',
+                subtitle: 'CPD & Career Mastery',
                 icon: TrendingUp,
                 color: 'text-emerald-700',
                 bg: 'bg-emerald-50',
+                border: 'hover:border-emerald-600/40',
               },
             ].map((block, idx) => {
               const Icon = block.icon;
@@ -544,17 +545,19 @@ export const Home: React.FC = () => {
                   key={idx}
                   variants={cardVariant}
                   whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
-                  className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-2xl transition-all duration-300 space-y-4 group cursor-pointer"
+                  className={`bg-white p-8 sm:p-10 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center justify-center space-y-5 group cursor-pointer ${block.border}`}
                 >
-                  <div className={`w-12 h-12 rounded-xl ${block.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className={`w-6 h-6 ${block.color}`} />
+                  <div className={`w-20 h-20 rounded-2xl ${block.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xs`}>
+                    <Icon className={`w-10 h-10 ${block.color} stroke-[2.2]`} />
                   </div>
-                  <h3 className="text-xl font-extrabold text-cib-charcoal-900 font-display group-hover:text-[#008129] transition-colors">
-                    {block.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    {block.description}
-                  </p>
+                  <div className="space-y-1.5">
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-display tracking-tight group-hover:text-[#008129] transition-colors">
+                      {block.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm font-semibold text-slate-500 tracking-wide">
+                      {block.subtitle}
+                    </p>
+                  </div>
                 </motion.div>
               );
             })}
@@ -572,16 +575,10 @@ export const Home: React.FC = () => {
             variants={fadeInUp}
             className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
           >
-            <div className="space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#008129]">
-                FACULTY &amp; VOICES
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-cib-charcoal-900 font-display">
-                MEET THE VOICES SHAPING THE INDUSTRY
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-black text-cib-charcoal-900 font-display uppercase tracking-tight">
+                Our Keynote Speakers
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base max-w-xl">
-                Distinguished regulators, bank chief executives, and international scholars leading the discourse at CIB Ghana forums.
-              </p>
             </div>
 
             <Link
@@ -816,10 +813,6 @@ export const Home: React.FC = () => {
                 <Navigation className="w-3.5 h-3.5 text-[#008129]" />
                 <span>Get Directions</span>
               </a>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-black/70 backdrop-blur-md text-white text-xs font-semibold border border-white/20">
-                <Sparkles className="w-3.5 h-3.5 text-[#FFE500]" />
-                <span>Complimentary Leisure Activities Included</span>
-              </div>
             </div>
           </div>
         </motion.div>
