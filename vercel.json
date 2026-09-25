@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build --workspace=cib-ghana-frontend",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "npm install",
+  "framework": null
+}
