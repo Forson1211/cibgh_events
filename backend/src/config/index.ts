@@ -12,15 +12,19 @@ export const config = {
 
   // Supabase
   supabase: {
-    url: process.env.SUPABASE_URL || '',
-    anonKey: process.env.SUPABASE_ANON_KEY || '',
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+    url: process.env.SUPABASE_URL || 'https://ijfjuezgvroyhtwcnlrx.supabase.co',
+    anonKey:
+      process.env.SUPABASE_ANON_KEY ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqZmp1ZXpndnJveWh0d2NubHJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjIzNzQsImV4cCI6MjEwNTg5ODM3NH0.cbzToWOHT5DeYbtXDqG_lt_Lfxsb3Y-eJaQkC5UJW40',
+    serviceRoleKey:
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqZmp1ZXpndnJveWh0d2NubHJ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MDMyMjM3NCwiZXhwIjoyMTA1ODk4Mzc0fQ.LKsElhVQb7kY4Xek5SvoTwTpZ1rsuWbjSBX7-SlMP9k',
   },
 
   // Paystack
   paystack: {
-    secretKey: process.env.PAYSTACK_SECRET_KEY || 'sk_test_demo_paystack_secret_key',
-    publicKey: process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_demo_paystack_public_key',
+    secretKey: process.env.PAYSTACK_SECRET_KEY || 'sk_test_cib_ghana_paystack_secret_key',
+    publicKey: process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_cib_ghana_paystack_public_key',
   },
 
   // Email Service (Resend or SMTP via Nodemailer)

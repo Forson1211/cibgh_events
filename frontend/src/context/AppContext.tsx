@@ -3,6 +3,7 @@ import { EventItem, Registration, UserProfile, Speaker, Sponsor } from '../types
 import { MOCK_EVENTS, MOCK_REGISTRATIONS, DEMO_USERS, MOCK_SPEAKERS, MOCK_SPONSORS } from '../data/mockData';
 import { generateRegistrationNumber } from '../lib/utils';
 import { ApiClient } from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 interface AppContextType {
   events: EventItem[];
@@ -165,27 +166,88 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const refreshEvents = async () => {
     try {
       const res = await ApiClient.getEvents();
-      if (res.success && Array.isArray(res.data)) {
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
         setEvents(res.data);
+        return;
       }
     } catch (err) {
-      console.warn('Failed to refresh events:', err);
+      console.warn('ApiClient events failed, trying direct Supabase:', err);
+    }
+
+    // Direct Supabase fallback
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('events')
+          .select('*, registration_types(*)')
+          .order('start_date', { ascending: true });
+        if (!error && Array.isArray(data) && data.length > 0) {
+          setEvents(data as EventItem[]);
+        }
+      } catch (sbErr) {
+        console.warn('Direct Supabase fetch failed:', sbErr);
+      }
     }
   };
 
   const refreshRegistrations = async () => {
     setIsLiveSyncing(true);
+    let synced = false;
     try {
       const res = await ApiClient.getRegistrations();
       if (res.success && Array.isArray(res.data)) {
         setRegistrations(res.data.map(normalizeRegistration));
         setLastSyncedAt(new Date());
+        synced = true;
       }
     } catch {
-      // Backend temporarily offline; localStorage remains primary
-    } finally {
-      setIsLiveSyncing(false);
+      // Backend temporarily offline; check direct Supabase fallback below
     }
+
+    if (!synced && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('registrations')
+          .select('*, registration_types(name), events(title)')
+          .order('created_at', { ascending: false });
+        if (!error && Array.isArray(data) && data.length > 0) {
+          const mapped: Registration[] = data.map((r: any) => ({
+            id: r.id,
+            event_id: r.event_id,
+            event_title: r.events?.title || 'CIB Ghana Event',
+            registration_number: r.registration_number,
+            registration_type_id: r.registration_type_id,
+            registration_type_name: r.registration_types?.name || 'Standard Delegate Pass',
+            first_name: r.first_name,
+            last_name: r.last_name,
+            email: r.email,
+            phone: r.phone,
+            organization: r.organization,
+            job_title: r.job_title,
+            country: r.country || 'Ghana',
+            cib_member_id: r.cib_member_id,
+            membership_category: r.membership_category || 'Non-Member',
+            attendance_type: r.attendance_type || 'PHYSICAL',
+            dietary_requirements: r.dietary_requirements,
+            special_assistance: r.special_assistance,
+            total_amount: Number(r.total_amount) || 0,
+            currency: r.currency || 'GHS',
+            payment_status: r.payment_status || 'PENDING',
+            payment_reference: r.payment_reference,
+            payment_method: r.payment_method,
+            check_in_status: r.check_in_status || 'REGISTERED',
+            check_in_time: r.check_in_time,
+            created_at: r.created_at,
+          }));
+          setRegistrations(mapped.map(normalizeRegistration));
+          setLastSyncedAt(new Date());
+        }
+      } catch {
+        // RLS prevents unauthenticated anon reading registrations; handled by backend
+      }
+    }
+
+    setIsLiveSyncing(false);
   };
 
   const refreshAll = async () => {
