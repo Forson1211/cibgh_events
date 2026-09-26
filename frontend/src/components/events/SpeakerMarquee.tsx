@@ -72,7 +72,7 @@ export const SpeakerMarquee: React.FC<SpeakerMarqueeProps> = ({ speakers, onSele
               key={`${speaker.id}-${idx}`}
               speaker={speaker}
               onSelect={onSelectSpeaker}
-              className="w-64 sm:w-72 md:w-80 shrink-0"
+              className="w-52 sm:w-60 md:w-64 shrink-0"
             />
           ))}
         </div>
