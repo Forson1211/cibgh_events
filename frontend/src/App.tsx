@@ -145,6 +145,7 @@ export function App() {
             <Route path="/events/:slug" element={<EventDetails />} />
             <Route path="/events/:slug/register" element={<Register />} />
             <Route path="/events/:slug/ticket/:id" element={<Ticket />} />
+            <Route path="/ticket/:id" element={<Ticket />} />
             <Route path="/speakers" element={<Speakers />} />
             <Route path="/partners" element={<PartnersSponsors />} />
             <Route path="/sponsors" element={<PartnersSponsors />} />
